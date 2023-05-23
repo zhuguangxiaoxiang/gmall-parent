@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gmall.product.mapper.BaseAttrInfoMapper">
+
+    <resultMap id="BaseResultMap" type="com.gmall.product.entity.BaseAttrInfo">
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="attrName" column="attr_name" jdbcType="VARCHAR"/>
+        <result property="categoryId" column="category_id" jdbcType="BIGINT"/>
+        <result property="categoryLevel" column="category_level" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--自定义JavaBean的封装规则-->
+    <resultMap id="BaseAttrAndValueRM"
+               type="com.gmall.product.entity.BaseAttrInfo"
+               autoMapping="true"> <!--autoMapping="true" 自动映射  首字母大写和驼峰命名互相转换-->
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <!--            <result property="attrName" column="attr_name" />-->
+        <!--            <result property="categoryId" column="category_id" />-->
+        <!--            <result property="categoryLevel" column="category_level"/>-->
+        <collection property="attrValueList" ofType="com.gmall.product.entity.BaseAttrValue"
+                    autoMapping="true">
+            <id property="id" column="id"></id>
+            <!--            <result property="attrId" column="attr_id"></result>-->
+            <!--            <result property="valueName" column="value_name"></result>-->
+        </collection>
+    </resultMap>
+
+    <select id="getBaseAttrAndValue" resultMap="BaseAttrAndValueRM">
+        SELECT base_attr_info.*,
+        base_attr_value.id vid ,base_attr_value.value_name,base_attr_value.attr_id
+        FROM `base_attr_info`
+        LEFT JOIN `base_attr_value`
+        ON base_attr_info.`id` = `base_attr_value`.`attr_id`
+        WHERE (base_attr_info.`category_id` = #{category1Id} AND base_attr_info.`category_level` = 1)
+        <if test="category2Id != null">
+            OR (base_attr_info.`category_id` = #{category2Id} AND base_attr_info.`category_level` = 2)
+        </if>
+        <if test="category3Id != null">
+            OR (base_attr_info.`category_id` = #{category3Id} AND base_attr_info.`category_level` = 3)
+        </if>
+    </select>
+    <sql id="Base_Column_List">
+        id,attr_name,category_id,
+        category_level
+    </sql>
+</mapper>
