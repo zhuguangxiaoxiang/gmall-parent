@@ -44,7 +44,7 @@ public class BaseCategoryController {
     @ApiOperation("查询所有一级分类")
     @GetMapping("/getCategory1")
     public Result getCategory1() {
-        List<BaseCategory1> category1s = baseCategoryService.list();
+        List<BaseCategory1> category1s = baseCategoryService.getCategory1();
         return Result.ok(category1s);
     }
 
@@ -54,19 +54,17 @@ public class BaseCategoryController {
     @ApiOperation("查询某个一级分类下的所有二级分类")
     @GetMapping("/getCategory2/{category1}")
     public Result getCategory2(@PathVariable("category1") Long category1) {
-        QueryWrapper<BaseCategory2> queryWrapper = new QueryWrapper<>();
-        List<BaseCategory2> category2s = baseCategory2Service.list(queryWrapper.eq("category1_id", category1));
+        List<BaseCategory2> category2s = baseCategory2Service.getCategory2(category1);
         return Result.ok(category2s);
     }  
     
     /**
      * 查询某个二级分类下的所有三级分类
      */
-    @ApiOperation("查询某个一级分类下的所有二级分类")
+    @ApiOperation("查询某个二级分类下的所有三级分类")
     @GetMapping("/getCategory3/{category2}")
     public Result getCategory3(@PathVariable("category2") Long category2) {
-        QueryWrapper<BaseCategory3> queryWrapper = new QueryWrapper<>();
-        List<BaseCategory3> category3s = baseCategory3Service.list(queryWrapper.eq("category2_id", category2));
+        List<BaseCategory3> category3s = baseCategory3Service.getCategory3(category2);
         return Result.ok(category3s);
     }
 }

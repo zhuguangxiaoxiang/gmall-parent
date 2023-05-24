@@ -21,15 +21,14 @@
         <!--            <result property="categoryLevel" column="category_level"/>-->
         <collection property="attrValueList" ofType="com.gmall.product.entity.BaseAttrValue"
                     autoMapping="true">
-            <id property="id" column="id"></id>
+            <id property="id" column="vid"></id>
             <!--            <result property="attrId" column="attr_id"></result>-->
             <!--            <result property="valueName" column="value_name"></result>-->
         </collection>
     </resultMap>
 
     <select id="getBaseAttrAndValue" resultMap="BaseAttrAndValueRM">
-        SELECT base_attr_info.*,
-        base_attr_value.id vid ,base_attr_value.value_name,base_attr_value.attr_id
+        SELECT <include refid="baseSql"></include>
         FROM `base_attr_info`
         LEFT JOIN `base_attr_value`
         ON base_attr_info.`id` = `base_attr_value`.`attr_id`
@@ -41,8 +40,8 @@
             OR (base_attr_info.`category_id` = #{category3Id} AND base_attr_info.`category_level` = 3)
         </if>
     </select>
-    <sql id="Base_Column_List">
-        id,attr_name,category_id,
-        category_level
+    <sql id="baseSql">
+        base_attr_info.*,
+        base_attr_value.id vid ,base_attr_value.value_name,base_attr_value.attr_id
     </sql>
 </mapper>

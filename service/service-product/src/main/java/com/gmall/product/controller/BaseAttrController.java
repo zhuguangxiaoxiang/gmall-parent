@@ -1,15 +1,13 @@
 package com.gmall.product.controller;
 
+import com.baomidou.mybatisplus.extension.api.R;
 import com.gmall.common.result.Result;
 import com.gmall.product.entity.BaseAttrInfo;
 import com.gmall.product.service.BaseAttrInfoService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -40,4 +38,11 @@ public class BaseAttrController {
         List<BaseAttrInfo> baseAttrInfos = baseAttrInfoService.getBaseAttrValue(category1Id, category2Id, category3Id);
         return Result.ok(baseAttrInfos);
     }
+
+//    @ApiOperation("添加平台属性")
+//    @PostMapping("/saveAttrInfo")
+//    public R saveAttrInfo(@RequestBody BaseAttrInfo baseAttrInfo) {
+//        baseAttrInfoService.save(baseAttrInfo);
+//        return Result.ok();
+//    }
 }
