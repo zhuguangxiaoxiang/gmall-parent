@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gmall.product.mapper.BaseAttrInfoMapper">
+
+    <resultMap id="BaseResultMap" type="com.gmall.product.entity.BaseAttrInfo">
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="attrName" column="attr_name" jdbcType="VARCHAR"/>
+        <result property="categoryId" column="category_id" jdbcType="BIGINT"/>
+        <result property="categoryLevel" column="category_level" jdbcType="INTEGER"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="isDeleted" column="is_deleted" jdbcType="TINYINT"/>
+    </resultMap>
+    <resultMap id="getAttrValueAndNameRM" type="com.gmall.product.entity.BaseAttrInfo"
+               autoMapping="true">
+        <id property="id" column="id"></id>
+        <!--        <result property="attrName" column="attr_name"/>-->
+        <!--        <result property="categoryId" column="category_id" />-->
+        <!--        <result property="categoryLevel" column="category_level"/>-->
+        <!--        <result property="createTime" column="create_time"/>-->
+        <!--        <result property="updateTime" column="update_time"/>-->
+        <!--        <result property="isDeleted" column="is_deleted"/>-->
+        <collection property="attrValueList" ofType="com.gmall.product.entity.BaseAttrValue"
+                    autoMapping="true">
+            <id property="id" column="vid"></id>
+            <!--            <result property="valueName" column="value_name"></result>-->
+            <!--            <result property="attrId" column="attr_id"></result>-->
+            <!--            <result property="createTime" column="create_time"></result>-->
+            <!--            <result property="updateTime" column="update_time"></result>-->
+            <!--            <result property="isDeleted" column="is_delete"></result>-->
+        </collection>
+    </resultMap>
+
+    <sql id="BaseSql">
+        base_attr_info.id,
+        base_attr_info.attr_name,
+        base_attr_info.category_id,
+        base_attr_info.category_level,
+        base_attr_value.id vid,
+        base_attr_value.attr_id,
+        base_attr_value.value_name
+    </sql>
+
+    <select id="getAttrValueAndName" resultMap="getAttrValueAndNameRM">
+        SELECT
+        <include refid="BaseSql"></include>
+        FROM base_attr_info
+        LEFT JOIN base_attr_value ON base_attr_info.id = base_attr_value.attr_id
+        <where>
+            <trim prefix="(" suffix=")">
+                <if test="category1Id != null || category1Id != ''">
+                    category_id = #{category1Id} AND category_level = 1
+                </if>
+                <if test="category2Id != null || category2Id != ''">
+                    OR category_id = #{category2Id} AND category_level = 2
+                </if>
+                <if test="category3Id != null || category3Id != ''">
+                    OR category_id = #{category3Id} AND category_level = 3
+                </if>
+            </trim>
+        </where>
+        AND base_attr_value.is_deleted = 0
+        AND base_attr_info.is_deleted = 0;
+    </select>
+</mapper>

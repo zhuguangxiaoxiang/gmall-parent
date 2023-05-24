@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gmall.product.mapper.BaseFrontendParamMapper">
+
+    <resultMap id="BaseResultMap" type="com.gmall.product.entity.BaseFrontendParam">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="code" column="code" jdbcType="VARCHAR"/>
+            <result property="deleteId" column="delete_id" jdbcType="BIGINT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,code,delete_id
+    </sql>
+</mapper>
