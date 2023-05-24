@@ -44,6 +44,7 @@
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger-ui</artifactId>
         </dependency>
+
         <!--用来转换json使用 {JavaObject - json | json - JavaObject}-->
         <dependency>
             <groupId>com.alibaba</groupId>

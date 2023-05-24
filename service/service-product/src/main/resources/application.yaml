@@ -1,5 +1,5 @@
 server:
-  port: 7001
+  port: 8000
 spring:
   datasource:
     url: jdbc:mysql://192.168.200.128:3306/gmall_product?useSSL=false
@@ -15,9 +15,6 @@ spring:
 #    sampler:
 #      rate: 100
 
-app:
-  minio:
-    endpoint: http://192.168.200.128:9000
-    access-key: admin
-    secret-key: admin123456
-    bucket-name: mall-oss
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
