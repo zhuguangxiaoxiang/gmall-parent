@@ -20,7 +20,7 @@ public class BaseCategory1ServiceImpl extends ServiceImpl<BaseCategory1Mapper, B
 
     @Override
     public List<BaseCategory1> getCategory1() {
-        return this.list(new LambdaQueryWrapper<BaseCategory1>().eq(BaseCategory1::getIsDeleted, 0));
+        return this.list(null);
     }
 }
 

@@ -20,7 +20,7 @@ public class BaseCategory3ServiceImpl extends ServiceImpl<BaseCategory3Mapper, B
 
     @Override
     public List<BaseCategory3> getCategory3(Long category2Id) {
-        return this.list(new LambdaQueryWrapper<BaseCategory3>().eq(BaseCategory3::getCategory2Id, category2Id).eq(BaseCategory3::getIsDeleted,0));
+        return this.list(new LambdaQueryWrapper<BaseCategory3>().eq(BaseCategory3::getCategory2Id, category2Id));
     }
 }
 

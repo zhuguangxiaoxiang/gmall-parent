@@ -2,6 +2,7 @@ package com.gmall.product.service;
 
 import com.gmall.product.entity.BaseAttrInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.gmall.product.entity.BaseAttrValue;
 
 import java.util.List;
 
@@ -13,4 +14,10 @@ import java.util.List;
 public interface BaseAttrInfoService extends IService<BaseAttrInfo> {
 
     List<BaseAttrInfo> getAttrValueAndName(Long category1Id, Long category2Id, Long category3Id);
+
+    void saveAttrInfo(BaseAttrInfo baseAttrInfo);
+
+    List<BaseAttrValue> getAttrInfoListForId(Long attrId);
+
+    BaseAttrInfo getAttrInfo(Long attrId);
 }
