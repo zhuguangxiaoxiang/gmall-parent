@@ -1,7 +1,10 @@
 package com.gmall.product.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.gmall.product.entity.BaseTrademark;
 import com.baomidou.mybatisplus.extension.service.IService;
+
+import java.util.List;
 
 /**
 * @author Administrator
@@ -10,4 +13,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface BaseTrademarkService extends IService<BaseTrademark> {
 
+    Page<BaseTrademark> getTrademarkPage(Page<BaseTrademark> baseTrademarkPage);
+
+    List<BaseTrademark> getTrademarkList();
 }
