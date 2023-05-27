@@ -1,10 +1,15 @@
 package com.gmall.product.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gmall.product.entity.SkuInfo;
+import com.gmall.product.entity.SpuImage;
 import com.gmall.product.service.SkuInfoService;
 import com.gmall.product.mapper.SkuInfoMapper;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
 * @author Administrator
@@ -13,7 +18,13 @@ import org.springframework.stereotype.Service;
 */
 @Service
 public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper, SkuInfo>
-    implements SkuInfoService{
+    implements SkuInfoService {
+
+
+    @Override
+    public Page<SkuInfo> getSkuInfoList(Page<SkuInfo> skuInfoPage) {
+        return this.page(skuInfoPage);
+    }
 
 }
 

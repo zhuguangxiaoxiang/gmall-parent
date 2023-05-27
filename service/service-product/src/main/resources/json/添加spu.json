@@ -1,0 +1,47 @@
+{
+  "id": null,
+  "spuName": "荣耀V60",
+  "description": "荣耀V60",
+  "category3Id": 2,
+  "tmId": 2, //以上的信息保存到spu_info
+  "spuImageList": [ //这些信息存到 spu_image
+    {
+      "imgName": "5.png",
+      "imgUrl": "http://192.168.200.123:9000/mall-oss/f97dafb0dc2a44ca8d56f94a618544d2.png"
+    }
+  ],
+  "spuSaleAttrList": [ // 销售属性名存到spu_sale_attr
+    {
+      "baseSaleAttrId": "1",
+      "saleAttrName": "选择颜色",
+      "spuSaleAttrValueList": [ //销售属性值：spu_sale_attr_value
+        {
+          "baseSaleAttrId": "1",
+          "saleAttrValueName": "黑色"
+        },
+        {
+          "baseSaleAttrId": "1",
+          "saleAttrValueName": "蓝色"
+        }
+      ]
+    },
+    {
+      "baseSaleAttrId": "2",
+      "saleAttrName": "选择版本",
+      "spuSaleAttrValueList": [
+        {
+          "baseSaleAttrId": "2",
+          "saleAttrValueName": "8+256"
+        },
+        {
+          "baseSaleAttrId": "2",
+          "saleAttrValueName": "8+512"
+        },
+        {
+          "baseSaleAttrId": "2",
+          "saleAttrValueName": "12+512"
+        }
+      ]
+    }
+  ]
+}

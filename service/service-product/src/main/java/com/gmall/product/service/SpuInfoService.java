@@ -1,8 +1,12 @@
 package com.gmall.product.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.gmall.product.entity.SpuImage;
 import com.gmall.product.entity.SpuInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.gmall.product.vo.SpuSaveInfoVo;
+
+import java.util.List;
 
 /**
 * @author Administrator
@@ -12,4 +16,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface SpuInfoService extends IService<SpuInfo> {
 
     Page<SpuInfo> getSpuInfo(Page<SpuInfo> spuInfoPage, Long category3Id);
+
+    void saveSpuInfo(SpuSaveInfoVo spuSaveInfoVo);
+
+    List<SpuImage> getSpuImage(Long spuId);
 }
