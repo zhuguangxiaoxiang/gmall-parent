@@ -1,6 +1,0 @@
-#app:
-#  minio:
-#    endpoint: http://192.168.200.123:9000
-#    access-key: admin
-#    secret-key: admin123456
-#    bucket-name: mall-oss
