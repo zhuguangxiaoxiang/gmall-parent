@@ -27,4 +27,10 @@
         is_sale,create_time,update_time,
         is_deleted
     </sql>
+    <update id="updateIsOnSale">
+        UPDATE sku_info SET is_sale = 1 WHERE id = #{skuId}
+    </update>
+    <update id="updateCancelSale">
+        UPDATE sku_info SET is_sale = 0 WHERE id = #{skuId}
+    </update>
 </mapper>

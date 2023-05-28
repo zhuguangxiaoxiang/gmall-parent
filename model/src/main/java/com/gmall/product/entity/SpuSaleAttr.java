@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.annotation.*;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
+
 import lombok.Data;
 
 /**
@@ -49,6 +51,9 @@ public class SpuSaleAttr implements Serializable {
      */
     @TableLogic
     private Integer isDeleted;
+
+    @TableField(exist = false)
+    private List<SpuSaleAttrValue> spuSaleAttrValueList;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;

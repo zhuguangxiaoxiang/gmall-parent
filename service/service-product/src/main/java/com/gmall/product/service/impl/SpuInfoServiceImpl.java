@@ -1,6 +1,5 @@
 package com.gmall.product.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gmall.product.entity.SpuImage;
@@ -19,7 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -98,29 +96,31 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoMapper, SpuInfo>
 
         //3、保存销售属性名spu_sale_attr
         List<SpuSaleAttr> spuSaleAttrs = spuSaveInfoVo.getSpuSaleAttrList()
-                .stream().map(spuSaleAttrListDTO -> {
+                .stream().map(SpuSaleAttrListDTO -> {
                     SpuSaleAttr spuSaleAttr = new SpuSaleAttr();
-                    BeanUtils.copyProperties(spuSaleAttrListDTO, spuSaleAttr);
+                    BeanUtils.copyProperties(SpuSaleAttrListDTO, spuSaleAttr);
                     spuSaleAttr.setSpuId(spuInfoId);
                     return spuSaleAttr;
                 }).collect(Collectors.toList());
         spuSaleAttrService.saveBatch(spuSaleAttrs);
 
         //4、存销售属性值 spu_sale_attr_value
-        List<SpuSaleAttrValue> collect = spuSaveInfoVo.getSpuSaleAttrList()
-                .stream().flatMap(spuSaleAttrListDTO -> {
-                    //spuSaleAttrListDTO是每个销售属性，带了很多销售属性值
-                    Stream<SpuSaleAttrValue> stream = spuSaleAttrListDTO.getSpuSaleAttrValueList().stream().map(value -> {
-                        SpuSaleAttrValue spuSaleAttrValue = new SpuSaleAttrValue();
-                        spuSaleAttrValue.setBaseSaleAttrId(value.getBaseSaleAttrId());
-                        spuSaleAttrValue.setSaleAttrValueName(value.getSaleAttrValueName());
-                        spuSaleAttrValue.setSaleAttrName(spuSaleAttrListDTO.getSaleAttrName());
-                        spuSaleAttrValue.setSpuId(spuInfoId);
-                        return spuSaleAttrValue;
-                    });
-                    return stream;
+        List<SpuSaleAttrValue> attrValues = spuSaveInfoVo.getSpuSaleAttrList()
+                .stream()
+                .flatMap(item -> {
+                    //item是每个销售属性，带了很多销售属性值
+                    return item.getSpuSaleAttrValueList()
+                            .stream()
+                            .map(val -> {
+                                SpuSaleAttrValue attrValue = new SpuSaleAttrValue();
+                                attrValue.setSpuId(spuInfoId);
+                                attrValue.setBaseSaleAttrId(val.getBaseSaleAttrId());
+                                attrValue.setSaleAttrValueName(val.getSaleAttrValueName());
+                                attrValue.setSaleAttrName(item.getSaleAttrName());
+                                return attrValue;
+                            });
                 }).collect(Collectors.toList());
-        spuSaleAttrValueService.saveBatch(collect);
+        spuSaleAttrValueService.saveBatch(attrValues);
     }
 
     @Override
@@ -128,6 +128,8 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoMapper, SpuInfo>
 //        return spuImageService.list(new LambdaQueryWrapper<SpuImage>().eq(SpuImage::getSpuId,spuId));
         return spuImageService.lambdaQuery().eq(SpuImage::getSpuId,spuId).list();
     }
+
+
 }
 
 

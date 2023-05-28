@@ -1,7 +1,11 @@
 package com.gmall.product.service;
 
+import com.gmall.product.entity.SpuSaleAttr;
 import com.gmall.product.entity.SpuSaleAttrValue;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.gmall.product.vo.SpuSaleAttrVo;
+
+import java.util.List;
 
 /**
 * @author Administrator
@@ -10,4 +14,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface SpuSaleAttrValueService extends IService<SpuSaleAttrValue> {
 
+    List<SpuSaleAttrVo > spuSaleAttrList(Long spuId);
 }

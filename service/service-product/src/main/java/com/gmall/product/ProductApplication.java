@@ -7,6 +7,7 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.cloud.client.SpringCloudApplication;
 import org.springframework.context.annotation.Import;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 
 //@EnableCircuitBreaker
@@ -17,6 +18,7 @@ import org.springframework.context.annotation.Import;
 //swagger： com.gmall.common.config
 //minio:    com.gmall.common.config.minio
 
+@EnableTransactionManagement
 @EnableMinio //开启minio功能
 @Import({Swagger2Config.class})
 @MapperScan(basePackages = "com.gmall.product.mapper")

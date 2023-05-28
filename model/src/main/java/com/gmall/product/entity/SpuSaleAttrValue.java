@@ -56,5 +56,8 @@ public class SpuSaleAttrValue implements Serializable {
     private Integer isDeleted;
 
     @TableField(exist = false)
+    private String isChecked; //未来标记当前sku是否这个值的
+
+    @TableField(exist = false)
     private static final long serialVersionUID = 1L;
 }

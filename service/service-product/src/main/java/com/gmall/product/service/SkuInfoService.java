@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.gmall.product.entity.SkuInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.gmall.product.entity.SpuImage;
+import com.gmall.product.vo.SkuSaveInfoVo;
 
 import java.util.List;
 
@@ -16,4 +17,9 @@ public interface SkuInfoService extends IService<SkuInfo> {
 
     Page<SkuInfo> getSkuInfoList(Page<SkuInfo> skuInfoPage);
 
+    void saveSkuInfo(SkuSaveInfoVo skuSaveInfoVo);
+
+    void onSale(Long skuId);
+
+    void cancelSale(Long skuId);
 }

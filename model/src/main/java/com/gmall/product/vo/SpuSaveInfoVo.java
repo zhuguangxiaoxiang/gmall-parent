@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -48,7 +49,6 @@ public class SpuSaveInfoVo {
         private String saleAttrName;
         @JsonProperty("spuSaleAttrValueList")
         private List<SpuSaleAttrValueListDTO> spuSaleAttrValueList;
-
         @NoArgsConstructor
         @Data
         public static class SpuSaleAttrValueListDTO {

@@ -4,7 +4,10 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.gmall.common.result.Result;
 import com.gmall.product.entity.SpuImage;
 import com.gmall.product.entity.SpuInfo;
+import com.gmall.product.entity.SpuSaleAttr;
 import com.gmall.product.service.SpuInfoService;
+import com.gmall.product.service.SpuSaleAttrValueService;
+import com.gmall.product.vo.SpuSaleAttrVo;
 import com.gmall.product.vo.SpuSaveInfoVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -25,12 +28,22 @@ public class SpuInfoController {
     @Autowired
     SpuInfoService spuInfoService;
 
+    @Autowired
+    SpuSaleAttrValueService spuSaleAttrValueService;
+
+
+    @ApiOperation("根据spuId获取销售属性")
+    @GetMapping("/spuSaleAttrList/{spuId}")
+    public Result spuSaleAttrList(@PathVariable("spuId") Long spuId) {
+        List<SpuSaleAttrVo> spuSaleAttrList = spuSaleAttrValueService.spuSaleAttrList(spuId);
+        return Result.ok(spuSaleAttrList);
+    }
 
     @ApiOperation("根据spuId获取图片列表")
     @GetMapping("/spuImageList/{spuId}")
     public Result spuImageList(@PathVariable("spuId") Long spuId) {
         List<SpuImage> spuImageList = spuInfoService.getSpuImage(spuId);
-         return Result.ok(spuImageList);
+        return Result.ok(spuImageList);
     }
 
     @GetMapping("/{page}/{limit}")

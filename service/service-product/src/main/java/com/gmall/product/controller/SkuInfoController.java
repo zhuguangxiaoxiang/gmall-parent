@@ -6,13 +6,11 @@ import com.gmall.product.entity.SkuImage;
 import com.gmall.product.entity.SkuInfo;
 import com.gmall.product.entity.SpuImage;
 import com.gmall.product.service.SkuInfoService;
+import com.gmall.product.vo.SkuSaveInfoVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -27,6 +25,26 @@ public class SkuInfoController {
 
     @Autowired
     SkuInfoService skuInfoService;
+
+    @ApiOperation("下架")
+    @GetMapping("/cancelSale/{skuId}")
+    public Result cancelSale(@PathVariable("skuId") Long skuId) {
+        skuInfoService.cancelSale(skuId);
+        return Result.ok();
+    }
+
+    @ApiOperation("上架")
+    @GetMapping("/onSale/{skuId}")
+    public Result onSale(@PathVariable("skuId") Long skuId) {
+        skuInfoService.onSale(skuId);
+        return Result.ok();
+    }
+    @ApiOperation("保存sku")
+    @PostMapping("/saveSkuInfo")
+    public Result saveSkuInfo(@RequestBody SkuSaveInfoVo skuSaveInfoVo) {
+        skuInfoService.saveSkuInfo(skuSaveInfoVo);
+        return Result.ok();
+    }
 
     @ApiOperation("获取sku分页列表")
     @GetMapping("/list/{page}/{limit}")

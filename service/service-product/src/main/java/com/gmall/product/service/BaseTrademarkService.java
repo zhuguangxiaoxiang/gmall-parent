@@ -3,6 +3,7 @@ package com.gmall.product.service;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.gmall.product.entity.BaseTrademark;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.gmall.product.vo.BaseTrademarkVo;
 
 import java.util.List;
 
@@ -16,4 +17,6 @@ public interface BaseTrademarkService extends IService<BaseTrademark> {
     Page<BaseTrademark> getTrademarkPage(Page<BaseTrademark> baseTrademarkPage);
 
     List<BaseTrademark> getTrademarkList();
+
+    BaseTrademarkVo getTrademarkById(Long id);
 }

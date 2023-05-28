@@ -5,19 +5,39 @@
 <mapper namespace="com.gmall.product.mapper.SpuSaleAttrValueMapper">
 
     <resultMap id="BaseResultMap" type="com.gmall.product.entity.SpuSaleAttrValue">
-            <id property="id" column="id" jdbcType="BIGINT"/>
-            <result property="spuId" column="spu_id" jdbcType="BIGINT"/>
-            <result property="baseSaleAttrId" column="base_sale_attr_id" jdbcType="BIGINT"/>
-            <result property="saleAttrValueName" column="sale_attr_value_name" jdbcType="VARCHAR"/>
-            <result property="saleAttrName" column="sale_attr_name" jdbcType="VARCHAR"/>
-            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
-            <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
-            <result property="isDeleted" column="is_deleted" jdbcType="TINYINT"/>
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="spuId" column="spu_id" jdbcType="BIGINT"/>
+        <result property="baseSaleAttrId" column="base_sale_attr_id" jdbcType="BIGINT"/>
+        <result property="saleAttrValueName" column="sale_attr_value_name" jdbcType="VARCHAR"/>
+        <result property="saleAttrName" column="sale_attr_name" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="isDeleted" column="is_deleted" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <resultMap id="SpuSaleAttrAndValueRM" type="com.gmall.product.vo.SpuSaleAttrVo"
+               autoMapping="true">
+        <id property="id" column="id"/>
+        <collection property="spuSaleAttrValueList" ofType="com.gmall.product.vo.dto.SpuSaleAttrValueListAndNameDTO"
+                    autoMapping="true">
+        <id property="id" column="vid"></id>
+        </collection>
     </resultMap>
 
     <sql id="Base_Column_List">
-        id,spu_id,base_sale_attr_id,
-        sale_attr_value_name,sale_attr_name,create_time,
-        update_time,is_deleted
+        spu_sale_attr.id,
+               spu_sale_attr.spu_id,
+               spu_sale_attr.base_sale_attr_id,
+               spu_sale_attr.sale_attr_name,
+               spu_sale_attr.id vid,
+               spu_sale_attr_value.sale_attr_value_name
     </sql>
+
+    <select id="getSpuSaleAttrList" resultMap="SpuSaleAttrAndValueRM">
+        SELECT <include refid="Base_Column_List"></include>
+        FROM spu_sale_attr
+                 JOIN spu_sale_attr_value ON spu_sale_attr.spu_id = spu_sale_attr_value.spu_id AND
+                                             spu_sale_attr.base_sale_attr_id = spu_sale_attr_value.base_sale_attr_id
+        WHERE spu_sale_attr_value.is_deleted = 0 AND spu_sale_attr.is_deleted = 0 AND spu_sale_attr.spu_id = #{spuId}
+    </select>
 </mapper>

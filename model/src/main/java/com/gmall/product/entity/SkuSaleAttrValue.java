@@ -27,27 +27,13 @@ public class SkuSaleAttrValue implements Serializable {
     /**
      * spu_id(冗余)
      */
-    private Integer spuId;
+    private Long spuId;
 
     /**
      * 销售属性值id
      */
     private Long saleAttrValueId;
 
-    /**
-     * 
-     */
-    private Long saleAttrId;
-
-    /**
-     * 
-     */
-    private String saleAttrName;
-
-    /**
-     * 
-     */
-    private String saleAttrValueName;
 
     /**
      * 创建时间

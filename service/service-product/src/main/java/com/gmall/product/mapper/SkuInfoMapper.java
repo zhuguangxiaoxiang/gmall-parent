@@ -2,6 +2,7 @@ package com.gmall.product.mapper;
 
 import com.gmall.product.entity.SkuInfo;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
 
 /**
 * @author Administrator
@@ -11,6 +12,9 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 */
 public interface SkuInfoMapper extends BaseMapper<SkuInfo> {
 
+    void updateIsOnSale(@Param("skuId") Long skuId);
+
+    void updateCancelSale(@Param("skuId") Long skuId);
 }
 
 

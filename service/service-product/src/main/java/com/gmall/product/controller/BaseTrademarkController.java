@@ -5,13 +5,11 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.gmall.common.result.Result;
 import com.gmall.product.entity.BaseTrademark;
 import com.gmall.product.service.BaseTrademarkService;
+import com.gmall.product.vo.BaseTrademarkVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -26,6 +24,35 @@ public class BaseTrademarkController {
 
     @Autowired
     BaseTrademarkService baseTrademarkService;
+
+    @ApiOperation("删除品牌属性")
+    @DeleteMapping("/remove/{id}")
+    public Result removeTrademark(@PathVariable("id") Long id) {
+        baseTrademarkService.removeById(id);
+        return Result.ok();
+    }
+
+    @ApiOperation("修改品牌属性")
+    @PutMapping("/update")
+    public Result updateTrademark(@RequestBody BaseTrademark baseTrademark) {
+        baseTrademarkService.updateById(baseTrademark);
+        return Result.ok();
+    }
+
+    @ApiOperation("根据Id获取品牌")
+    @GetMapping("/get/{id}")
+    public Result getTrademarkById(@PathVariable("id") Long id) {
+        BaseTrademarkVo BaseTrademarkVo = baseTrademarkService.getTrademarkById(id);
+        return Result.ok(BaseTrademarkVo);
+    }
+
+    @ApiOperation("添加品牌属性")
+    @PostMapping("/save")
+    public Result saveTrademarkList(@RequestBody BaseTrademark baseTrademark) {
+        baseTrademarkService.save(baseTrademark);
+        return Result.ok();
+    }
+
 
     /**
      * 获取品牌属性
