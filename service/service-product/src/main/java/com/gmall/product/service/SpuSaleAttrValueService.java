@@ -14,5 +14,4 @@ import java.util.List;
 */
 public interface SpuSaleAttrValueService extends IService<SpuSaleAttrValue> {
 
-    List<SpuSaleAttrVo > spuSaleAttrList(Long spuId);
 }

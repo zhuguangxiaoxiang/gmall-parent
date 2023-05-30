@@ -12,8 +12,41 @@
             <result property="isDeleted" column="is_deleted" jdbcType="TINYINT"/>
     </resultMap>
 
+<!--    三级分类：无限极分类，不确定级数怎么写？
+1、全部分类都查出来自己用代码组装
+2、数据库一次性返回层级关系并封装好
+-->
+    <resultMap id="categoryTreerRM" type="com.gmall.product.vo.CategoryTreeVo">
+        <id property="categoryId" column="c1id"></id>
+        <result property="categoryName" column="c1name"></result>
+        <collection property="categoryChild" ofType="com.gmall.product.vo.CategoryTreeVo">
+            <id property="categoryId" column="c2id"></id>
+            <result property="categoryName" column="c2name"></result>
+        <collection property="categoryChild" ofType="com.gmall.product.vo.CategoryTreeVo">
+            <id property="categoryId" column="c3id"></id>
+            <result property="categoryName" column="c3name"></result>
+        </collection>
+        </collection>
+    </resultMap>
     <sql id="Base_Column_List">
-        id,name,create_time,
-        update_time,is_deleted
+               bc1.id c1id,
+               bc1.name c1name,
+               bc2.id c2id,
+               bc2.name c2name,
+               bc3.id c3id,
+               bc3.name c3name
     </sql>
+    <select id="getCategoryTree" resultMap="categoryTreerRM">
+        SELECT <include refid="Base_Column_List"></include>
+        FROM base_category1 bc1
+                 LEFT JOIN base_category2 bc2 ON bc1.id = bc2.category1_id
+                 LEFT JOIN base_category3 bc3 ON bc2.id = bc3.category2_id;
+    </select>
+    <select id="getCategoryTreeWithC3Id" resultMap="categoryTreerRM">
+        SELECT <include refid="Base_Column_List"></include>
+        FROM base_category1 bc1
+        LEFT JOIN base_category2 bc2 ON bc1.id = bc2.category1_id
+        LEFT JOIN base_category3 bc3 ON bc2.id = bc3.category2_id
+        WHERE bc3.id = #{c3Id}
+    </select>
 </mapper>

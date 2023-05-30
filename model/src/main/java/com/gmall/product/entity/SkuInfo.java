@@ -5,13 +5,16 @@ import com.baomidou.mybatisplus.annotation.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
+
 import lombok.Data;
 
 /**
  * 库存单元表
+ *
  * @TableName sku_info
  */
-@TableName(value ="sku_info")
+@TableName(value = "sku_info")
 @Data
 public class SkuInfo implements Serializable {
     /**
@@ -28,7 +31,7 @@ public class SkuInfo implements Serializable {
     /**
      * 价格
      */
-    private Integer price;
+    private BigDecimal price;
 
     /**
      * sku名称
@@ -71,15 +74,18 @@ public class SkuInfo implements Serializable {
     private Date createTime;
 
     /**
-     * 
+     *
      */
     private Date updateTime;
 
     /**
-     * 
+     *
      */
     @TableLogic
     private Integer isDeleted;
+
+    @TableField(exist = false)
+    private List<SkuImage> skuImageList;//sku的图片列表
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;

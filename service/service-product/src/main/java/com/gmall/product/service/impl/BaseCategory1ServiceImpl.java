@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gmall.product.entity.BaseCategory1;
 import com.gmall.product.service.BaseCategory1Service;
 import com.gmall.product.mapper.BaseCategory1Mapper;
+import com.gmall.product.vo.CategoryTreeVo;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,6 +22,18 @@ public class BaseCategory1ServiceImpl extends ServiceImpl<BaseCategory1Mapper, B
     @Override
     public List<BaseCategory1> getCategory1() {
         return this.list(null);
+    }
+
+    @Override
+    public List<CategoryTreeVo> getCategoryTree() {
+        List<CategoryTreeVo> categoryTreeVoList = baseMapper.getCategoryTree();
+        return categoryTreeVoList;
+    }
+
+    @Override
+    public CategoryTreeVo getCategoryTreeWithC3Id(Long c3Id) {
+        CategoryTreeVo categoryTreeVo = baseMapper.getCategoryTreeWithC3Id(c3Id);
+        return categoryTreeVo;
     }
 }
 

@@ -19,15 +19,6 @@ import java.util.List;
 public class SpuSaleAttrValueServiceImpl extends ServiceImpl<SpuSaleAttrValueMapper, SpuSaleAttrValue>
     implements SpuSaleAttrValueService{
 
-    /**
-     * 查询spu销售属性名和值的集合
-     * @param spuId
-     * @return
-     */
-    @Override
-    public List<SpuSaleAttrVo > spuSaleAttrList(Long spuId) {
-        return baseMapper.getSpuSaleAttrList(spuId);
-    }
 }
 
 

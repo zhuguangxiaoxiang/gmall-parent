@@ -2,6 +2,10 @@ package com.gmall.product.mapper;
 
 import com.gmall.product.entity.BaseCategory1;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.gmall.product.vo.CategoryTreeVo;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
 * @author Administrator
@@ -11,6 +15,9 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 */
 public interface BaseCategory1Mapper extends BaseMapper<BaseCategory1> {
 
+    List<CategoryTreeVo> getCategoryTree();
+
+    CategoryTreeVo getCategoryTreeWithC3Id(@Param("c3Id") Long c3Id);
 }
 
 

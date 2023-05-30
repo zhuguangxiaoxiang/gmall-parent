@@ -1,0 +1,11 @@
+server:
+  port: 9000
+
+#屏蔽数据源配置
+spring:
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+  thymeleaf:
+    cache: false
+    prefix: classpath:/templates/
+    suffix: .html

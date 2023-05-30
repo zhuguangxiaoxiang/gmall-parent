@@ -14,9 +14,68 @@
             <result property="isDeleted" column="is_deleted" jdbcType="TINYINT"/>
     </resultMap>
 
+
+    <resultMap id="SpuSaleAttrAndValueRM" type="com.gmall.product.entity.SpuSaleAttr"
+               autoMapping="true">
+        <id property="id" column="id"/>
+        <collection property="spuSaleAttrValueList" ofType="com.gmall.product.entity.SpuSaleAttrValue"
+                    autoMapping="true">
+            <id property="id" column="vid"></id>
+        </collection>
+    </resultMap>
     <sql id="Base_Column_List">
-        id,spu_id,base_sale_attr_id,
-        sale_attr_name,create_time,update_time,
-        is_deleted
+
     </sql>
+
+    <select id="getSpuSaleAttrList" resultMap="SpuSaleAttrAndValueRM">
+        SELECT spu_sale_attr.id,
+               spu_sale_attr.spu_id,
+               spu_sale_attr.base_sale_attr_id,
+               spu_sale_attr.sale_attr_name,
+               spu_sale_attr_value.id vid,
+               spu_sale_attr_value.sale_attr_value_name
+        FROM spu_sale_attr
+                 LEFT JOIN spu_sale_attr_value
+                     ON spu_sale_attr.spu_id = spu_sale_attr_value.spu_id
+                            AND spu_sale_attr.base_sale_attr_id = spu_sale_attr_value.base_sale_attr_id
+        WHERE spu_sale_attr_value.is_deleted = 0
+          AND spu_sale_attr.is_deleted = 0
+          AND spu_sale_attr.spu_id = #{spuId}
+    </select>
+
+    <select id="getSpuSaleAttrListOrder" resultMap="SpuSaleAttrAndValueRM">
+        SELECT spu_sale_attr.id,
+               spu_sale_attr.spu_id,
+               spu_sale_attr.base_sale_attr_id,
+               spu_sale_attr.sale_attr_name,
+               spu_sale_attr_value.id  vid,
+               spu_sale_attr_value.sale_attr_value_name,
+               if(sku_sale_attr_value.sale_attr_value_id IS NULL, '0', '1') is_checked
+        FROM spu_sale_attr
+                 LEFT JOIN spu_sale_attr_value
+                           ON spu_sale_attr.spu_id = spu_sale_attr_value.spu_id
+                               AND spu_sale_attr.base_sale_attr_id = spu_sale_attr_value.base_sale_attr_id
+                 LEFT JOIN sku_sale_attr_value
+                           ON sku_sale_attr_value.sku_id = #{skuId}
+                               AND sku_sale_attr_value.sale_attr_value_id = spu_sale_attr_value.id
+        WHERE spu_sale_attr_value.is_deleted = 0
+          AND spu_sale_attr.is_deleted = 0
+          AND spu_sale_attr.spu_id = #{spuId}
+        ORDER BY spu_sale_attr.base_sale_attr_id, spu_sale_attr_value.id
+    </select>
+
+    <select id="getValuesSkuJson" resultType="com.gmall.product.vo.ValueSkuJsonVo">
+        -- 52:35 FJWGHSDOL:佛叫我干活，速度上线 FROM JOIN WHERE GROUP HAVING SELECT DISTINCT ORDER LIMIT
+        SELECT a.sku_id,
+               GROUP_CONCAT(DISTINCT a.sale_attr_value_id
+                            ORDER BY a.sale_attr_value_id ASC SEPARATOR '|') value_json
+        FROM (SELECT sku_sale_attr_value.sku_id,
+                     sku_sale_attr_value.sale_attr_value_id
+              FROM sku_sale_attr_value
+                       LEFT JOIN spu_sale_attr_value
+                                 ON sku_sale_attr_value.sale_attr_value_id = spu_sale_attr_value.id
+              WHERE sku_sale_attr_value.sku_id IN (SELECT id FROM sku_info WHERE spu_id = #{spuId})
+              ORDER BY sku_sale_attr_value.sku_id, spu_sale_attr_value.base_sale_attr_id, sku_sale_attr_value.id) a
+        GROUP BY a.sku_id
+    </select>
 </mapper>

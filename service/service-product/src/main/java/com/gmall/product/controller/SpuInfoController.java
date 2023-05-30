@@ -6,6 +6,7 @@ import com.gmall.product.entity.SpuImage;
 import com.gmall.product.entity.SpuInfo;
 import com.gmall.product.entity.SpuSaleAttr;
 import com.gmall.product.service.SpuInfoService;
+import com.gmall.product.service.SpuSaleAttrService;
 import com.gmall.product.service.SpuSaleAttrValueService;
 import com.gmall.product.vo.SpuSaleAttrVo;
 import com.gmall.product.vo.SpuSaveInfoVo;
@@ -29,13 +30,13 @@ public class SpuInfoController {
     SpuInfoService spuInfoService;
 
     @Autowired
-    SpuSaleAttrValueService spuSaleAttrValueService;
+    SpuSaleAttrService spuSaleAttrService;
 
 
     @ApiOperation("根据spuId获取销售属性")
     @GetMapping("/spuSaleAttrList/{spuId}")
     public Result spuSaleAttrList(@PathVariable("spuId") Long spuId) {
-        List<SpuSaleAttrVo> spuSaleAttrList = spuSaleAttrValueService.spuSaleAttrList(spuId);
+        List<SpuSaleAttr> spuSaleAttrList = spuSaleAttrService.spuSaleAttrList(spuId);
         return Result.ok(spuSaleAttrList);
     }
 

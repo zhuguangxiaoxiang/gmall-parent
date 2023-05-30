@@ -15,14 +15,6 @@
         <result property="isDeleted" column="is_deleted" jdbcType="TINYINT"/>
     </resultMap>
 
-    <resultMap id="SpuSaleAttrAndValueRM" type="com.gmall.product.vo.SpuSaleAttrVo"
-               autoMapping="true">
-        <id property="id" column="id"/>
-        <collection property="spuSaleAttrValueList" ofType="com.gmall.product.vo.dto.SpuSaleAttrValueListAndNameDTO"
-                    autoMapping="true">
-        <id property="id" column="vid"></id>
-        </collection>
-    </resultMap>
 
     <sql id="Base_Column_List">
         spu_sale_attr.id,
@@ -33,11 +25,4 @@
                spu_sale_attr_value.sale_attr_value_name
     </sql>
 
-    <select id="getSpuSaleAttrList" resultMap="SpuSaleAttrAndValueRM">
-        SELECT <include refid="Base_Column_List"></include>
-        FROM spu_sale_attr
-                 JOIN spu_sale_attr_value ON spu_sale_attr.spu_id = spu_sale_attr_value.spu_id AND
-                                             spu_sale_attr.base_sale_attr_id = spu_sale_attr_value.base_sale_attr_id
-        WHERE spu_sale_attr_value.is_deleted = 0 AND spu_sale_attr.is_deleted = 0 AND spu_sale_attr.spu_id = #{spuId}
-    </select>
 </mapper>

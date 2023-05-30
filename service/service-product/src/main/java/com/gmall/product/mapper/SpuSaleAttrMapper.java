@@ -2,6 +2,11 @@ package com.gmall.product.mapper;
 
 import com.gmall.product.entity.SpuSaleAttr;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.gmall.product.vo.SpuSaleAttrVo;
+import com.gmall.product.vo.ValueSkuJsonVo;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
 * @author Administrator
@@ -11,6 +16,11 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 */
 public interface SpuSaleAttrMapper extends BaseMapper<SpuSaleAttr> {
 
+    List<SpuSaleAttr> getSpuSaleAttrList(@Param("spuId") Long spuId);
+
+    List<SpuSaleAttr> getSpuSaleAttrListOrder(@Param("spuId") Long spuId, @Param("skuId") Long skuId);
+
+    List<ValueSkuJsonVo> getValuesSkuJson(@Param("spuId") Long spuId);
 }
 
 
