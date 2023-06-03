@@ -27,7 +27,7 @@ public class SkuDetailRpcController {
      * @return
      */
     @GetMapping("/sku/detail/{skuId}")
-    public Result<SkuDetailVo> getSkuDetails(@PathVariable("skuId") Long skuId){
+    public Result<SkuDetailVo> getSkuDetails(@PathVariable("skuId") Long skuId) throws InterruptedException {
         SkuDetailVo skuDetailVo = skuDetailService.getSkuDetailData(skuId);
         //TODO 获取商品详情
         return Result.ok(skuDetailVo);

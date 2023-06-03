@@ -1,9 +1,12 @@
 package com.gmall.product.service.impl;
+
 import java.util.Date;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.gmall.common.constant.RedisConst;
 import com.gmall.product.entity.*;
 import com.gmall.product.service.SkuAttrValueService;
 import com.gmall.product.service.SkuImageService;
@@ -14,6 +17,7 @@ import com.gmall.product.vo.SkuSaveInfoVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,6 +42,9 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper, SkuInfo>
 
     @Autowired
     SkuSaleAttrValueService skuSaleAttrValueService;
+
+    @Autowired
+    StringRedisTemplate redisTemplate;
 
     @Override
     public Page<SkuInfo> getSkuInfoList(Page<SkuInfo> skuInfoPage) {
@@ -87,16 +94,25 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper, SkuInfo>
             return skuSaleAttrValue;
         }).collect(Collectors.toList());
         skuSaleAttrValueService.saveBatch(skuSaleAttrValues);
+
+        //同步bitmap
+        redisTemplate.opsForValue().setBit(RedisConst.SKUID_BIT_MAP, skuId, true);
     }
 
     @Override
     public void onSale(Long skuId) {
-        baseMapper.updateIsOnSale(skuId);
+        LambdaUpdateWrapper<SkuInfo> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+        lambdaUpdateWrapper.eq(SkuInfo::getId, skuId).set(SkuInfo::getIsSale, 1);
+        this.update(lambdaUpdateWrapper);
+//        baseMapper.updateIsOnSale(skuId);
     }
 
     @Override
     public void cancelSale(Long skuId) {
-        baseMapper.updateCancelSale(skuId);
+        LambdaUpdateWrapper<SkuInfo> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+        lambdaUpdateWrapper.eq(SkuInfo::getId, skuId).set(SkuInfo::getIsSale, 0);
+        this.update(lambdaUpdateWrapper);
+//        baseMapper.updateCancelSale(skuId);
     }
 
 }

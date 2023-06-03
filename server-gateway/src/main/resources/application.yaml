@@ -19,6 +19,11 @@ spring:
           predicates:
             - Path=/admin/product/**
 
+        - id: item_route
+          uri: lb://service-item
+          predicates:
+            - Path=/incr
+
         - id: weball_route   #只要前面没有任何人能匹配上，最终都交给web-all
           uri: lb://web-all
           predicates:
