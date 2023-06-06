@@ -11,6 +11,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import com.alibaba.fastjson.JSON;
 import com.gmall.common.constant.RedisConst;
+import com.gmall.item.aspect.annotaion.MallCache;
 import com.gmall.item.feign.SkuDetailFeignClient;
 import com.gmall.item.service.CacheService;
 import com.gmall.product.entity.SkuImage;
@@ -52,8 +53,21 @@ public class SkuDetailServiceImpl implements SkuDetailService {
     RedissonClient redissonClient;
 
 
+    //业务Service只关注业务，增强逻辑由切面完成
+    //
+    @MallCache(
+//            cacheKey = RedisConst.SKU_DETAIL_CACHE + "#{#args[0]}",
+            bitMapName = RedisConst.SKUID_BIT_MAP,
+            bitMapKey = "#{#args[0]}",
+//            lockKey = RedisConst.SKU_LOCK + "#{#args[0]}",
+            ttl = 7,
+            unit = TimeUnit.DAYS)
     @Override
-    public SkuDetailVo getSkuDetailData(Long skuId) throws InterruptedException {
+    public SkuDetailVo getSkuDetailData(Long skuId) {
+        return getDataFromRpc(skuId);
+    }
+
+    public SkuDetailVo getSkuDetailDataWithDistLock(Long skuId) throws InterruptedException {
         //1、先查缓存
         SkuDetailVo cache = cacheService.getFromCache(skuId);
         if (cache != null) {
@@ -202,7 +216,6 @@ public class SkuDetailServiceImpl implements SkuDetailService {
     private SkuDetailVo getDataFromRpc(Long skuId) {
         //获取商品的详情数据
         SkuDetailVo skuDetailVo = new SkuDetailVo();
-
 
         //1、异步：商品详情【图片】 //自定义的线程池
         CompletableFuture<SkuInfo> skuInfoFuture = CompletableFuture.supplyAsync(() -> {

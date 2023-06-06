@@ -21,12 +21,7 @@ public class LockServiceImpl implements LockService {
     @Autowired
     StringRedisTemplate redisTemplate;
 
-    /**
-     * 阻塞式加锁：
-     * 1、如果获取锁失败就一直等待锁，直到成功
-     *
-     * @return
-     */
+
     @Override
     public String lock() throws InterruptedException {
         //加锁失败不能跳出方法，继续while循环

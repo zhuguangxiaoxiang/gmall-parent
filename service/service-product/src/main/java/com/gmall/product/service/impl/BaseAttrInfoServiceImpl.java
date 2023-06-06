@@ -48,7 +48,7 @@ public class BaseAttrInfoServiceImpl extends ServiceImpl<BaseAttrInfoMapper, Bas
 //            LambdaQueryWrapper<BaseAttrValue> lambdaQueryWrapper = new LambdaQueryWrapper<>();
 //            lambdaQueryWrapper.eq(BaseAttrValue::getAttrId,baseAttrInfo.getId());
 //            baseAttrValueService.remove(lambdaQueryWrapper);
-            baseAttrValueService.lambdaUpdate().eq(BaseAttrValue::getAttrId,baseAttrInfo.getId()).remove();
+            baseAttrValueService.lambdaUpdate().eq(BaseAttrValue::getAttrId, baseAttrInfo.getId()).remove();
         }
         List<BaseAttrValue> attrValueList = baseAttrInfo.getAttrValueList();
         //判断是否是空值
@@ -78,6 +78,7 @@ public class BaseAttrInfoServiceImpl extends ServiceImpl<BaseAttrInfoMapper, Bas
 
     /**
      * 根据平台属性ID 获取平台属性
+     *
      * @param attrId
      * @return
      */

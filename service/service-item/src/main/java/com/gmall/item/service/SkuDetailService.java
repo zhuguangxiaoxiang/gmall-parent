@@ -7,5 +7,5 @@ import com.gmall.product.vo.SkuDetailVo;
  * @Date: 2023/5/29
  */
 public interface SkuDetailService {
-    SkuDetailVo getSkuDetailData(Long skuId) throws InterruptedException;
+    SkuDetailVo getSkuDetailData(Long skuId);
 }

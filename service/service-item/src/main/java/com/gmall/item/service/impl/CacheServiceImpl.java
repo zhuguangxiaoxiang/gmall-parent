@@ -10,6 +10,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.lang.reflect.Type;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -39,14 +40,9 @@ public class CacheServiceImpl implements CacheService {
         }
     }
 
-    /**
-     * 保存商品
-     *
-     * @param skuId
-     * @param returnValue
-     */
+
     @Override
-    public void saveData(Long skuId, SkuDetailVo returnValue) {
+    public void saveData(Long skuId, Object returnValue) {
         String json = ""; //默认是空
         if (returnValue != null) {
             json = JSON.toJSONString(returnValue);//真正的json
@@ -55,15 +51,42 @@ public class CacheServiceImpl implements CacheService {
         redisTemplate.opsForValue().set(RedisConst.SKU_DETAIL_CACHE + skuId, json, 7, TimeUnit.DAYS);
     }
 
-    /**
-     * 判断是否有这个sku
-     *
-     * @param skuId
-     * @return
-     */
+
     @Override
     public boolean mightContain(Long skuId) {
         return redisTemplate.opsForValue().getBit(RedisConst.SKUID_BIT_MAP, skuId);
 
+    }
+
+
+    @Override
+    public Object getCacheDatta(String key, Type returnType) {
+        //1、查询缓存
+        String json = redisTemplate.opsForValue().get(key);
+        //2、缓存没有
+        if (StringUtils.isEmpty(json)) {
+            return null;
+        } else if ("".equals(json)) {
+            return new Object();//返回空对象
+        } else {
+            log.info("缓存命中...");
+            return JSON.parseObject(json, SkuDetailVo.class);
+        }
+    }
+
+    @Override
+    public boolean mightContain(String bitMapKey, Long bitMapIndex) {
+        Boolean aBoolean = redisTemplate.opsForValue().getBit(bitMapKey, bitMapIndex);
+        return aBoolean.booleanValue();
+    }
+
+    @Override
+    public void saveCatchData(String cacheKey, Object data, long ttl, TimeUnit unit) {
+        String json = ""; //默认是空
+        if (data != null) {
+            json = JSON.toJSONString(data);//真正的json
+        }
+
+        redisTemplate.opsForValue().set(cacheKey, json, ttl, unit);
     }
 }

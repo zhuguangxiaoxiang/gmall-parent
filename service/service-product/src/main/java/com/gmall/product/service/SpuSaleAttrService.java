@@ -13,9 +13,21 @@ import java.util.List;
  */
 public interface SpuSaleAttrService extends IService<SpuSaleAttr> {
 
+    /**
+     * 查询spu销售属性名和值的集合
+     *
+     * @param spuId
+     * @return
+     */
     List<SpuSaleAttr> spuSaleAttrList(Long spuId);
 
     List<SpuSaleAttr> getSpuSaleAttrListOrder(Long spuId, Long skuId);
 
+    /**
+     * 根据spuId得到所有sku的销售属性的集合
+     *
+     * @param spuId
+     * @return
+     */
     String getValuesSkuJson(Long spuId);
 }

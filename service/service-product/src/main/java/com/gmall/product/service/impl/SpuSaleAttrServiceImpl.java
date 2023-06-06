@@ -24,12 +24,7 @@ import java.util.stream.Collectors;
 public class SpuSaleAttrServiceImpl extends ServiceImpl<SpuSaleAttrMapper, SpuSaleAttr>
         implements SpuSaleAttrService {
 
-    /**
-     * 查询spu销售属性名和值的集合
-     *
-     * @param spuId
-     * @return
-     */
+
     @Override
     public List<SpuSaleAttr> spuSaleAttrList(Long spuId) {
         return baseMapper.getSpuSaleAttrList(spuId);
@@ -40,12 +35,7 @@ public class SpuSaleAttrServiceImpl extends ServiceImpl<SpuSaleAttrMapper, SpuSa
         return baseMapper.getSpuSaleAttrListOrder(spuId, skuId);
     }
 
-    /**
-     * 根据spuId得到所有sku的销售属性的集合
-     *
-     * @param spuId
-     * @return
-     */
+
     @Override
     public String getValuesSkuJson(Long spuId) {
         List<ValueSkuJsonVo> valueSkuJsonVos = baseMapper.getValuesSkuJson(spuId);
