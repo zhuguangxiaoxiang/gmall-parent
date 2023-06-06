@@ -1,18 +1,24 @@
 package com.gmall.item;
 
+import com.gmall.common.config.exception.annotation.EnableAutoExceptionHandler;
 import com.gmall.common.config.thread.annotation.EnableAppThreadPool;
 import org.springframework.boot.SpringApplication;
 import org.springframework.cloud.client.SpringCloudApplication;
 import org.springframework.cloud.openfeign.EnableFeignClients;
-import org.springframework.context.annotation.EnableAspectJAutoProxy;
 
 /**
  * @Auther: Administrator
  * @Date: 2023/5/29
+ *
+ * Spring：Redis
+ * 1、导入starter
+ * 2、写配置就行
  */
-@EnableAspectJAutoProxy
-//@EnableAppThreadPool
-@EnableFeignClients
+//@EnableAppCache
+@EnableAutoExceptionHandler
+@EnableAppThreadPool
+//用谁扫谁
+@EnableFeignClients(basePackages = "com.gmall.feign.product")
 @SpringCloudApplication
 public class ItemApplication {
     public static void main(String[] args) {

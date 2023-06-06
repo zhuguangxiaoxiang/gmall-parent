@@ -9,3 +9,5 @@ spring:
     cache: false
     prefix: classpath:/templates/
     suffix: .html
+  main:
+    allow-bean-definition-overriding: true  #允许bean定义信息重写

@@ -1,4 +1,4 @@
-package com.gmall.item.feign;
+package com.gmall.feign.product;
 
 import com.gmall.common.result.Result;
 import com.gmall.product.entity.SkuImage;
@@ -20,8 +20,7 @@ import java.util.List;
  */
 @RequestMapping("/api/inner/rpc/product")
 @FeignClient("service-product")
-public
-interface SkuDetailFeignClient {
+public interface ProductSkuDetailFeignClient {
     /**
      * 1、根据三级分类ID，得到整个分类的完整路径
      *

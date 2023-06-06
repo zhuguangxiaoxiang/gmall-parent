@@ -8,6 +8,7 @@ import com.gmall.product.service.SkuImageService;
 import com.gmall.product.service.SkuInfoService;
 import com.gmall.product.service.SpuSaleAttrService;
 import com.gmall.product.vo.SpuSaleAttrVo;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,6 +22,7 @@ import java.util.List;
  * @Auther: Administrator
  * @Date: 2023/5/29
  */
+@Slf4j
 @RestController
 @RequestMapping("/api/inner/rpc/product")
 public class SkuRpcController {
@@ -42,6 +44,7 @@ public class SkuRpcController {
      */
     @GetMapping("/skuinfo/{skuId}")
     public Result<SkuInfo> getSkuInfo(@PathVariable Long skuId) {
+        log.info("skuinfo查询......");
         SkuInfo skuInfo = skuInfoService.getById(skuId);
         return Result.ok(skuInfo);
     }

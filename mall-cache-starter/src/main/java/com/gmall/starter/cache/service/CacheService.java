@@ -1,6 +1,4 @@
-package com.gmall.item.service;
-
-import com.gmall.product.vo.SkuDetailVo;
+package com.gmall.starter.cache.service;
 
 import java.lang.reflect.Type;
 import java.util.concurrent.TimeUnit;
@@ -10,23 +8,29 @@ import java.util.concurrent.TimeUnit;
  * @Date: 2023/5/31
  */
 public interface CacheService {
-    SkuDetailVo getFromCache(Long skuId);
 
-    /**
-     * 保存商品
-     *
-     * @param skuId
-     * @param returnValue
-     */
-    void saveData(Long skuId, Object returnValue);
+//    /**
+//     * 缓存中查询sku
+//     * @param skuId
+//     * @return
+//     */
+//    SkuDetailVo getFromCache(Long skuId);
 
-    /**
-     * 判断是否有这个sku
-     *
-     * @param skuId
-     * @return
-     */
-    boolean mightContain(Long skuId);
+//    /**
+//     * 保存商品
+//     *
+//     * @param skuId
+//     * @param returnValue
+//     */
+//    void saveData(Long skuId, Object returnValue);
+
+//    /**
+//     * 判断是否有这个sku
+//     *
+//     * @param skuId
+//     * @return
+//     */
+//    boolean mightContain(Long skuId);
 
     /**
      * 从缓存中获取指定类型的数据
@@ -53,4 +57,10 @@ public interface CacheService {
      * @param unit
      */
     void saveCatchData(String cacheKey, Object proceed, long ttl, TimeUnit unit);
+
+    /**
+     * 延迟双删
+     * @param cacheKey
+     */
+    void delayDoubleDel(String cacheKey);
 }

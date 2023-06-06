@@ -1,13 +1,13 @@
-package com.gmall.item.aspect;
+package com.gmall.starter.cache.aspect;
 
-import com.gmall.common.constant.RedisConst;
-import com.gmall.item.aspect.annotaion.MallCache;
-import com.gmall.item.service.CacheService;
+import com.gmall.starter.cache.constant.RedisConst;
+import com.gmall.starter.cache.service.CacheService;
+import com.gmall.starter.cache.aspect.annotaion.MallCache;
+import com.sun.istack.internal.NotNull;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.aspectj.lang.reflect.MethodSignature;
-import org.jetbrains.annotations.NotNull;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,6 @@ import org.springframework.expression.Expression;
 import org.springframework.expression.ParserContext;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
-import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
@@ -32,12 +31,12 @@ import java.util.concurrent.TimeUnit;
  * @Date: 2023/6/4
  */
 @Slf4j
-@Component //加入容器中才能生效
+//@Component //加入容器中才能生效
 @Aspect //声明这是一个切面。保证切面的通用性
 public class CacheAspect {
 
     //    @Pointcut("execution(public * com.gmall.item.service.impl.SkuDetailServiceImpl.getSkuDetailData(java.lang.Long))")
-    @Pointcut("@annotation(com.gmall.item.aspect.annotaion.MallCache)")
+    @Pointcut("@annotation(com.gmall.starter.cache.aspect.annotaion.MallCache)")
     public void pc() {
 
     }

@@ -1,9 +1,12 @@
 package com.gmall.product;
 
 import com.gmall.common.config.Swagger2Config;
+import com.gmall.common.config.exception.annotation.EnableAutoExceptionHandler;
 import com.gmall.common.config.minio.annotation.EnableMinio;
 import com.gmall.common.config.minio.config.MinioConfiguration;
+import com.gmall.common.config.thread.annotation.EnableAppThreadPool;
 import org.mybatis.spring.annotation.MapperScan;
+import org.mybatis.spring.annotation.MapperScans;
 import org.springframework.boot.SpringApplication;
 import org.springframework.cloud.client.SpringCloudApplication;
 import org.springframework.context.annotation.Import;
@@ -17,8 +20,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 //主程序：   com.gmall.product
 //swagger： com.gmall.common.config
 //minio:    com.gmall.common.config.minio
-
-@EnableTransactionManagement
+@EnableAutoExceptionHandler
+@EnableAppThreadPool
 @EnableMinio //开启minio功能
 @Import({Swagger2Config.class})
 @MapperScan(basePackages = "com.gmall.product.mapper")

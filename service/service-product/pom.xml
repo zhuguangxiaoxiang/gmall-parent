@@ -22,23 +22,29 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-configuration-processor</artifactId>
-            <optional>true</optional>
-        </dependency>
 
         <dependency>
             <groupId>org.jsoup</groupId>
             <artifactId>jsoup</artifactId>
             <version>1.15.3</version>
         </dependency>
+
+
+        <dependency>
+            <groupId>com.gmall</groupId>
+            <artifactId>mall-cache-starter</artifactId>
+            <version>1.0</version>
+        </dependency>
+
         <dependency>
             <groupId>com.gmall</groupId>
             <artifactId>web-all</artifactId>
             <version>1.0</version>
             <scope>compile</scope>
         </dependency>
+
+
+
     </dependencies>
 
 </project>

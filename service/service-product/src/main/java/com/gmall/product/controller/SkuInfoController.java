@@ -7,6 +7,8 @@ import com.gmall.product.entity.SkuInfo;
 import com.gmall.product.entity.SpuImage;
 import com.gmall.product.service.SkuInfoService;
 import com.gmall.product.vo.SkuSaveInfoVo;
+import com.gmall.starter.cache.constant.RedisConst;
+import com.gmall.starter.cache.service.CacheService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,20 @@ public class SkuInfoController {
 
     @Autowired
     SkuInfoService skuInfoService;
+
+    @Autowired
+    CacheService cacheService;
+
+    //修改sku
+    @GetMapping("/updateSkuInfo")
+    public Result updateSkuInfo(@RequestBody SkuSaveInfoVo skuSaveInfoVo) {
+        //1、修改数据库
+
+        //2、删除缓存
+        cacheService.delayDoubleDel(RedisConst.SKU_DETAIL_CACHE + skuSaveInfoVo.getId());
+        return Result.ok();
+    }
+
 
     @ApiOperation("下架")
     @GetMapping("/cancelSale/{skuId}")

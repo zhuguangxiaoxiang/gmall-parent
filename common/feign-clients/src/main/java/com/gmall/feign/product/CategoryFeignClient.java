@@ -1,11 +1,10 @@
-package com.gmall.web.feign;
+package com.gmall.feign.product;
 
 import com.gmall.common.result.Result;
 import com.gmall.product.vo.CategoryTreeVo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -14,7 +13,12 @@ import java.util.List;
  * @Date: 2023/5/29
  */
 @RequestMapping("/api/inner/rpc/product")
-@FeignClient("service-product")//1、说清楚调用哪个微服务
+@FeignClient("service-product")
+//1、说清楚调用哪个微服务
+//2、【service-product】也是feign客户端的名字
+//3、每个feign客户端的配置集中在一个bean中。【service-product】
+//service-product.FeignClientSpecification
+//feign：兜底、远程超时、重试次数
 public interface CategoryFeignClient {
 
     //给远程的service-product发送get请求 路径是/api/inner/rpc/product/category/tree?haha=dd

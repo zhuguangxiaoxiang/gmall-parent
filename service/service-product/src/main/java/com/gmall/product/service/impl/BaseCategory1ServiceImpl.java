@@ -6,6 +6,8 @@ import com.gmall.product.entity.BaseCategory1;
 import com.gmall.product.service.BaseCategory1Service;
 import com.gmall.product.mapper.BaseCategory1Mapper;
 import com.gmall.product.vo.CategoryTreeVo;
+import com.gmall.starter.cache.aspect.annotaion.MallCache;
+import com.gmall.starter.cache.constant.RedisConst;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,6 +26,7 @@ public class BaseCategory1ServiceImpl extends ServiceImpl<BaseCategory1Mapper, B
         return this.list(null);
     }
 
+    @MallCache(cacheKey = RedisConst.CATEGORY_CATCH)
     @Override
     public List<CategoryTreeVo> getCategoryTree() {
         List<CategoryTreeVo> categoryTreeVoList = baseMapper.getCategoryTree();

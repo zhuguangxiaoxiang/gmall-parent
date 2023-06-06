@@ -1,8 +1,23 @@
 server:
   port: 10000
 
-
 spring:
   autoconfigure:
     #屏蔽数据源配置
     exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+  main:
+    allow-bean-definition-overriding: true  #允许bean定义信息重写
+
+app:
+  threadpool:
+    core-pool-size: 8
+    maximum-pool-size: 32
+    work-queue-size: 3000
+    keep-alive-time: 5 #min为单位
+
+
+
+#      service-product:
+#        connect-timeout: 1000
+#        read-timeout: 3000
+

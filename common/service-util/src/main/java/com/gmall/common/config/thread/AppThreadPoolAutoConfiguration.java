@@ -2,6 +2,7 @@ package com.gmall.common.config.thread;
 
 import com.gmall.common.config.thread.properties.AppThreadProperties;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,10 +24,10 @@ public class AppThreadPoolAutoConfiguration {
      * long keepAliveTime,   弹性线程的存活时间。 多久不干活就释放掉
      * TimeUnit unit,        时间单位
      * BlockingQueue<Runnable> workQueue, 阻塞队列。
-     *          任务过来核心线程进行处理，核心都忙的情况，新任务进入阻塞队列。
+     * 任务过来核心线程进行处理，核心都忙的情况，新任务进入阻塞队列。
      * ThreadFactory threadFactory,   线程工厂： 创建新线程。 new Thread()
      * RejectedExecutionHandler handler  拒绝策略：
-     *          核心、最大、队列都满了，新来的任务启用 拒绝策略
+     * 核心、最大、队列都满了，新来的任务启用 拒绝策略
      * 队列大小：
      * 1）、压测：  峰值*1.5；
      * 2）、内存：  未来微服务部署到哪种机器。
@@ -42,11 +43,12 @@ public class AppThreadPoolAutoConfiguration {
                 new LinkedBlockingQueue<>(threadProperties.getWorkQueueSize()),
                 new ThreadFactory() {
                     int i = 1;
+
                     @Override
                     public Thread newThread(Runnable r) {
                         Thread thread = new Thread(r); //创建线程，执行任务
                         //给名字
-                        thread.setName("核心线程["+ i++ +"]");
+                        thread.setName("核心线程[" + i++ + "]");
                         //1~10
                         thread.setPriority(10); //设置优先级
                         return thread;

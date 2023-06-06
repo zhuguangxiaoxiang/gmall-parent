@@ -30,6 +30,13 @@
             <artifactId>service-util</artifactId>
             <version>1.0</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.gmall</groupId>
+            <artifactId>feign-clients</artifactId>
+            <version>1.0</version>
+        </dependency>
+
         <!--数据载体-->
         <dependency>
             <groupId>com.gmall</groupId>

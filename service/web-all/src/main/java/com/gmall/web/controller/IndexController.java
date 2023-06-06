@@ -2,7 +2,7 @@ package com.gmall.web.controller;
 
 import com.gmall.common.result.Result;
 import com.gmall.product.vo.CategoryTreeVo;
-import com.gmall.web.feign.CategoryFeignClient;
+import com.gmall.feign.product.CategoryFeignClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
