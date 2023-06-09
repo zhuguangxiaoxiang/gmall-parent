@@ -2,7 +2,7 @@ package com.gmall.search.service;
 
 import com.gmall.search.Goods;
 import com.gmall.search.vo.SearchParamVo;
-import com.gmall.search.vo.searchRespVo;
+import com.gmall.search.vo.SearchRespVo;
 
 /**
  * @Auther: Administrator
@@ -15,7 +15,7 @@ public interface SearchService {
      * @param searchParamVo
      * @return
      */
-    searchRespVo search(SearchParamVo searchParamVo);
+    SearchRespVo search(SearchParamVo searchParamVo);
 
     /**
      * 保存到es

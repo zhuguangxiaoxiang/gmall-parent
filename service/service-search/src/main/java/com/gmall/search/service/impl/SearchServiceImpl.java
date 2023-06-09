@@ -3,7 +3,7 @@ package com.gmall.search.service.impl;
 import com.gmall.search.Goods;
 import com.gmall.search.repo.GoodsRepository;
 import com.gmall.search.vo.SearchParamVo;
-import com.gmall.search.vo.searchRespVo;
+import com.gmall.search.vo.SearchRespVo;
 import com.gmall.search.service.SearchService;
 import org.apache.lucene.search.join.ScoreMode;
 import org.elasticsearch.index.query.*;
@@ -21,8 +21,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -40,11 +38,13 @@ public class SearchServiceImpl implements SearchService {
     ElasticsearchRestTemplate elasticsearchRestTemplate;
 
     @Override
-    public searchRespVo search(SearchParamVo searchParamVo) {
+    public SearchRespVo search(SearchParamVo searchParamVo) {
         //1、根据前端传递的请求参数，构建检索使用的query条件
         Query query = buildQuery(searchParamVo);
         //检索
         SearchHits<Goods> result = elasticsearchRestTemplate.search(query, Goods.class, IndexCoordinates.of("goods"));
+
+//        SearchRespVo searchRespVo = buildSearchResp(result);
         return null;
     }
 

@@ -2,7 +2,7 @@ package com.gmall.web.controller;
 
 import com.gmall.feign.search.SearchFeignClient;
 import com.gmall.search.vo.SearchParamVo;
-import com.gmall.search.vo.searchRespVo;
+import com.gmall.search.vo.SearchRespVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,7 +26,7 @@ public class SearchController {
 
         //远程调用检索服务
 
-        searchRespVo searchData = searchFeignClient.search(param).getData();
+        SearchRespVo searchData = searchFeignClient.search(param).getData();
 
         //1、检索参数：   SearchParamVo
         model.addAttribute("searchPram", param);

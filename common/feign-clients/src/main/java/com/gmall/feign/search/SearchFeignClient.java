@@ -3,7 +3,7 @@ package com.gmall.feign.search;
 import com.gmall.common.result.Result;
 import com.gmall.search.Goods;
 import com.gmall.search.vo.SearchParamVo;
-import com.gmall.search.vo.searchRespVo;
+import com.gmall.search.vo.SearchRespVo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,7 +22,7 @@ public interface SearchFeignClient {
      * @return
      */
     @PostMapping("/searchgoods")
-    Result<searchRespVo> search(@RequestBody SearchParamVo searchParamVo);
+    Result<SearchRespVo> search(@RequestBody SearchParamVo searchParamVo);
 
 
 

@@ -10,7 +10,7 @@ import java.util.List;
  * @Date: 2023/6/8
  */
 @Data
-public class searchRespVo {
+public class SearchRespVo {
     //1、检索用的参数
     private SearchParamVo searchParam;
     //2、品牌面包屑

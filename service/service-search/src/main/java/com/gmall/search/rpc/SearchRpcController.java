@@ -3,10 +3,9 @@ package com.gmall.search.rpc;
 import com.gmall.common.result.Result;
 import com.gmall.search.Goods;
 import com.gmall.search.vo.SearchParamVo;
-import com.gmall.search.vo.searchRespVo;
+import com.gmall.search.vo.SearchRespVo;
 import com.gmall.search.service.SearchService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
 import org.springframework.web.bind.annotation.*;
 /**
  * @Auther: Administrator
@@ -49,9 +48,9 @@ public class SearchRpcController {
      * @return
      */
     @PostMapping("/searchgoods")
-    public Result<searchRespVo> search(@RequestBody SearchParamVo searchParamVo) {
+    public Result<SearchRespVo> search(@RequestBody SearchParamVo searchParamVo) {
         //TODO 检索
-        searchRespVo resp = searchService.search(searchParamVo);
+        SearchRespVo resp = searchService.search(searchParamVo);
         return Result.ok(resp);
     }
 }
