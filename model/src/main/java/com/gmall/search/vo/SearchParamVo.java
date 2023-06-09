@@ -25,7 +25,7 @@ public class SearchParamVo {
     private String[] props;//&props=4:128G:机身内存&props=3:8GB:运行内存
 
     //排序方式 1:综合（热度分）    2：价格
-    private String order;
+    private String order = "1:desc";
 
     //页码
     private Integer pageNo = 1;

@@ -4,16 +4,16 @@ import com.gmall.feign.search.SearchFeignClient;
 import com.gmall.search.vo.SearchParamVo;
 import com.gmall.search.vo.SearchRespVo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @Auther: Administrator
  * @Description
  * @Date: 2023/6/7
  */
-@RestController
+@Controller
 public class SearchController {
 
     @Autowired
@@ -29,7 +29,7 @@ public class SearchController {
         SearchRespVo searchData = searchFeignClient.search(param).getData();
 
         //1、检索参数：   SearchParamVo
-        model.addAttribute("searchPram", param);
+        model.addAttribute("searchParam", param);
 
         //2、品牌面包屑：  字符串
         model.addAttribute("trademarkParam", searchData.getTrademarkParam());

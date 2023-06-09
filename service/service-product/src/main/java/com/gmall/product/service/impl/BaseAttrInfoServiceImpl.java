@@ -14,6 +14,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -38,7 +39,7 @@ public class BaseAttrInfoServiceImpl extends ServiceImpl<BaseAttrInfoMapper, Bas
     @Override
     public void saveAttrInfo(BaseAttrInfo baseAttrInfo) {
         //修改-合并
-        if (baseAttrInfo.getId() == null) {
+        if (Objects.isNull(baseAttrInfo.getId())) {
             //base_attr_info在未保存之前id: null
             //  @TableId(type = IdType.AUTO)插入之后id自增
             baseMapper.insert(baseAttrInfo);
@@ -85,7 +86,7 @@ public class BaseAttrInfoServiceImpl extends ServiceImpl<BaseAttrInfoMapper, Bas
     @Override
     public BaseAttrInfo getAttrInfo(Long attrId) {
         BaseAttrInfo baseAttrInfo = this.getById(attrId);
-        if (baseAttrInfo != null) {
+        if (Objects.nonNull(baseAttrInfo)) {
             //查询平台属性值集合列表
             baseAttrInfo.setAttrValueList(this.getAttrInfoListForId(attrId));
         }

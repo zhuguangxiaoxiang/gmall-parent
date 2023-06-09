@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.lang.reflect.Type;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -50,7 +51,7 @@ public class CacheServiceImpl implements CacheService {
     @Override
     public void saveCatchData(String cacheKey, Object data, long ttl, TimeUnit unit) {
         String json = ""; //默认是空
-        if (data != null) {
+        if (Objects.nonNull(data)) {
             json = JSON.toJSONString(data);//真正的json
         }
 

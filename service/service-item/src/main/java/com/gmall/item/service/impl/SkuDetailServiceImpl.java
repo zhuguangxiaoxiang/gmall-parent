@@ -3,6 +3,7 @@ package com.gmall.item.service.impl;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -200,7 +201,7 @@ public class SkuDetailServiceImpl implements SkuDetailService {
 //        SkuDetailVo data = cache.get(skuId);
 //
 //        //2、缓存中没有
-//        if (data == null) {
+//        if (Objects.isNull(data)) {
 //            log.info("商品详情：缓存未命中，正在回源");
 //            //3、回源：回到数据源头进行查询
 //            data = getDataFromRpc(skuId);
@@ -228,7 +229,7 @@ public class SkuDetailServiceImpl implements SkuDetailService {
         CompletableFuture<Void> imageFuture = skuInfoFuture.thenAcceptAsync(data -> {
             log.info("图片：skuimages");
             List<SkuImage> skuImages = skuDetailFeignClient.getSkuImages(skuId).getData();
-            if (data == null) return;
+            if (Objects.isNull(data)) return;
             data.setSkuImageList(skuImages);
             skuDetailVo.setSkuInfo(data);
         }, executor);
@@ -237,7 +238,7 @@ public class SkuDetailServiceImpl implements SkuDetailService {
         //3、异步：当前商品精确完整分类信息;
         CompletableFuture<Void> categoryFuture = skuInfoFuture.thenAcceptAsync(data -> {
             log.info("分类：category");
-            if (data == null) return;
+            if (Objects.isNull(data)) return;
             CategoryTreeVo categoryTreeVo = skuDetailFeignClient.getCategoryTreeWithC3Id(data.getCategory3Id()).getData();
             //数据模型转换
             CategoryViewDTO categoryViewDTO = converToCategoryViewDTO(categoryTreeVo);
@@ -258,7 +259,7 @@ public class SkuDetailServiceImpl implements SkuDetailService {
         //5、销售属性
         CompletableFuture<Void> saleAttrFuture = skuInfoFuture.thenAcceptAsync(data -> {
             log.info("销售属性：saleAttr");
-            if (data == null) return;
+            if (Objects.isNull(data)) return;
             List<SpuSaleAttr> spuSaleAttrs = skuDetailFeignClient.getSpuSaleAttr(data.getSpuId(), skuId).getData();
             skuDetailVo.setSpuSaleAttrList(spuSaleAttrs);
         }, executor);
@@ -267,7 +268,7 @@ public class SkuDetailServiceImpl implements SkuDetailService {
         //6、当前sku的所有兄弟的所有组合可能性
         CompletableFuture<Void> valueJsonFuture = skuInfoFuture.thenAcceptAsync(data -> {
             log.info("组合：valueJson");
-            if (data == null) return;
+            if (Objects.isNull(data)) return;
             String json = skuDetailFeignClient.getValueSkuJson(data.getSpuId()).getData();
             skuDetailVo.setValuesSkuJson(json);
         }, executor);

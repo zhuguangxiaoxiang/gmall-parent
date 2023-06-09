@@ -23,6 +23,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -81,7 +82,7 @@ public class CacheAspect {
             Object fromCache = cacheService.getCacheDatta(cacheEval, returnType);
 
             //2、缓存中有直接返回
-            if (fromCache != null) {
+            if (Objects.nonNull(fromCache)) {
                 log.info("缓存命中");
                 return fromCache;
             }
@@ -119,7 +120,7 @@ public class CacheAspect {
                 log.info("获取分布式锁成功，准备回源.....");
                 //【动态：缓存中的数据】缓存双检查
                 fromCache = cacheService.getCacheDatta(cacheEval, returnType);
-                if (fromCache != null) {
+                if (Objects.nonNull(fromCache)) {
                     return fromCache;
                 }
                 log.info("正在回源....");

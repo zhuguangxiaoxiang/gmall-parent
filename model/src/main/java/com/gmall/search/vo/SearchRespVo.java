@@ -1,5 +1,6 @@
 package com.gmall.search.vo;
 
+import com.gmall.search.Goods;
 import lombok.Data;
 
 import java.util.List;
@@ -26,9 +27,9 @@ public class SearchRespVo {
     //7、排序信息
     private OrderMap orderMap;
     //8、TODO 商品列表
-    private List<Object> goodsList;
+    private List<Goods> goodsList;
     //9、页码
-    private Long pageNo;
+    private Integer pageNo;
     //10、总页码
     private Long totalPages;
 
