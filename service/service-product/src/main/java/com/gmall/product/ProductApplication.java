@@ -9,6 +9,7 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.mybatis.spring.annotation.MapperScans;
 import org.springframework.boot.SpringApplication;
 import org.springframework.cloud.client.SpringCloudApplication;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Import;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
@@ -20,6 +21,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 //主程序：   com.gmall.product
 //swagger： com.gmall.common.config
 //minio:    com.gmall.common.config.minio
+@EnableFeignClients("com.gmall.feign.search")
 @EnableAutoExceptionHandler
 @EnableAppThreadPool
 @EnableMinio //开启minio功能

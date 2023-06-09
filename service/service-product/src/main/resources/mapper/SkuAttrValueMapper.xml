@@ -21,4 +21,13 @@
         sku_id,attr_name,value_name,
         create_time,update_time,is_deleted
     </sql>
+    <select id="getSkuAttrsAndValues" resultType="com.gmall.search.SearchAttr">
+        SELECT sku_attr_value.ATTR_ID,
+               base_attr_info.attr_name,
+               base_attr_value.value_name attr_value
+        FROM sku_attr_value
+                 LEFT JOIN base_attr_info ON base_attr_info.id = sku_attr_value.attr_id
+                 LEFT JOIN base_attr_value ON base_attr_value.id = sku_attr_value.value_id
+        WHERE sku_id = #{skuId};
+    </select>
 </mapper>

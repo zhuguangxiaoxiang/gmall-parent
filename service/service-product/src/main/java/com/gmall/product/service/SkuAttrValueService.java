@@ -2,6 +2,9 @@ package com.gmall.product.service;
 
 import com.gmall.product.entity.SkuAttrValue;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.gmall.search.SearchAttr;
+
+import java.util.List;
 
 /**
 * @author Administrator
@@ -10,4 +13,10 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface SkuAttrValueService extends IService<SkuAttrValue> {
 
+    /**
+     * 获取某个sku的所有平台属性名和值
+     * @param skuId
+     * @return
+     */
+    List<SearchAttr> getSkuAttrsAndValues(Long skuId);
 }

@@ -4,7 +4,10 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gmall.product.entity.SkuAttrValue;
 import com.gmall.product.service.SkuAttrValueService;
 import com.gmall.product.mapper.SkuAttrValueMapper;
+import com.gmall.search.SearchAttr;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
 * @author Administrator
@@ -15,6 +18,10 @@ import org.springframework.stereotype.Service;
 public class SkuAttrValueServiceImpl extends ServiceImpl<SkuAttrValueMapper, SkuAttrValue>
     implements SkuAttrValueService{
 
+    @Override
+    public List<SearchAttr> getSkuAttrsAndValues(Long skuId) {
+        return baseMapper.getSkuAttrsAndValues(skuId);
+    }
 }
 
 

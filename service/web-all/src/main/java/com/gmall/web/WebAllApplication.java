@@ -19,7 +19,8 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @EnableAppThreadPool
 @EnableFeignClients(basePackages = {
         "com.gmall.feign.product",
-        "com.gmall.feign.item"
+        "com.gmall.feign.item",
+        "com.gmall.feign.search"
 })
 @SpringCloudApplication
 public class WebAllApplication {
