@@ -43,7 +43,7 @@ public class SearchServiceImpl implements SearchService {
     public searchRespVo search(SearchParamVo searchParamVo) {
         //1、根据前端传递的请求参数，构建检索使用的query条件
         Query query = buildQuery(searchParamVo);
-        //TODO 检索
+        //检索
         SearchHits<Goods> result = elasticsearchRestTemplate.search(query, Goods.class, IndexCoordinates.of("goods"));
         return null;
     }
