@@ -31,6 +31,9 @@ public class SkuDetailRpcController {
         //1、切面拦截：如果缓存中有真正的方法都不执行
          SkuDetailVo skuDetailVo = skuDetailService.getSkuDetailData(skuId);
 
+         //2、给这个商品增加热度
+        skuDetailService.incrHotScore(skuId);
+
         return Result.ok(skuDetailVo);
     }
 }

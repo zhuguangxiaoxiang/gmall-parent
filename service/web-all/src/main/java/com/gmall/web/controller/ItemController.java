@@ -56,7 +56,7 @@ public class ItemController {
         //5、valuesSkuJson
         model.addAttribute("valuesSkuJson", skuDetailVo.getValuesSkuJson());
 
-        //TODO 6、sku的规格；平台属性
+        //6、sku的规格；平台属性
         return "item/index";
     }
 }

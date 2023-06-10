@@ -82,5 +82,65 @@
     }
   ],
   "from": 0,
-  "size": 2
+  "size": 2,
+  "aggs": {
+    "tmIdAgg": {
+      "terms": {
+        "field": "tmId",
+        "size": 200
+      },
+      "aggs": {
+        "tmNameAgg": {
+          "terms": {
+            "field": "tmName",
+            "size": 1
+          }
+        },
+        "tmLogoAgg": {
+          "terms": {
+            "field": "tmLogoUrl",
+            "size": 1
+          }
+        }
+      }
+    },
+    "attrAgg": {
+      "nested": {
+        "path": "attrs"
+      },
+      "aggs": {
+        "attrIdAgg": {
+          "terms": {
+            "field": "attrs.attrId",
+            "size": 200
+          },
+          "aggs": {
+            "attrNameAgg": {
+              "terms": {
+                "field": "attrs.attrName",
+                "size": 1
+              }
+            },
+            "attrValueAgg": {
+              "terms": {
+                "field": "attrs.attrValue",
+                "size": 20
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "highlight": {
+    "fields": {
+      "title": {
+        "pre_tags": "<span style = 'color:red'>",
+        "post_tags": "</span>"
+      }
+    }
+  }
 }
+
+
+

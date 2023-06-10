@@ -1,5 +1,7 @@
 package com.gmall.search.service.impl;
 
+import com.google.common.collect.Lists;
+
 import com.gmall.search.vo.SearchRespVo.OrderMap;
 
 import com.gmall.search.Goods;
@@ -7,9 +9,19 @@ import com.gmall.search.repo.GoodsRepository;
 import com.gmall.search.vo.SearchParamVo;
 import com.gmall.search.vo.SearchRespVo;
 import com.gmall.search.service.SearchService;
-import com.google.common.collect.Lists;
 import org.apache.lucene.search.join.ScoreMode;
 import org.elasticsearch.index.query.*;
+import org.elasticsearch.search.aggregations.Aggregation;
+import org.elasticsearch.search.aggregations.AggregationBuilders;
+import org.elasticsearch.search.aggregations.Aggregations;
+import org.elasticsearch.search.aggregations.bucket.MultiBucketsAggregation;
+import org.elasticsearch.search.aggregations.bucket.nested.NestedAggregationBuilder;
+import org.elasticsearch.search.aggregations.bucket.nested.ParsedNested;
+import org.elasticsearch.search.aggregations.bucket.terms.ParsedLongTerms;
+import org.elasticsearch.search.aggregations.bucket.terms.ParsedStringTerms;
+import org.elasticsearch.search.aggregations.bucket.terms.Terms;
+import org.elasticsearch.search.aggregations.bucket.terms.TermsAggregationBuilder;
+import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -18,9 +30,12 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
 import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.SearchHits;
+import org.springframework.data.elasticsearch.core.document.Document;
 import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
+import org.springframework.data.elasticsearch.core.query.HighlightQuery;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
 import org.springframework.data.elasticsearch.core.query.Query;
+import org.springframework.data.elasticsearch.core.query.UpdateQuery;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -97,11 +112,46 @@ public class SearchServiceImpl implements SearchService {
                     }).collect(Collectors.toList());
             respVo.setPropsParamList(collect);
         }
-        //4、TODO 品牌列表；MySQL里的分组 select * from sku_info where xxx=xx and xxx=xxx group by tm_id  等于 es里的聚合
-        respVo.setTrademarkList(null);
-        //5、TODO 属性列表 select GROUP_CONCAT(attrValue) xxx group by attrId 等于 es里的聚合
-        respVo.setAttrsList(null);
-        //6、TODO url参数就是这一堆
+        //4、品牌列表；MySQL里的分组 select * from sku_info where xxx=xx and xxx=xxx group by tm_id  等于 es里的聚合
+        //ParsedLongTerms
+        ParsedLongTerms tmIdAgg = result.getAggregations().get("tmIdAgg");
+        List<SearchRespVo.Trademark> trademarkList = tmIdAgg.getBuckets().stream()
+                .map(bucket -> {
+                    SearchRespVo.Trademark trademark = new SearchRespVo.Trademark();
+                    Long tmId = bucket.getKeyAsNumber().longValue();
+                    trademark.setTmId(tmId);
+                    //2、品牌name
+                    ParsedStringTerms tmNameAgg = bucket.getAggregations().get("tmNameAgg");
+                    String tmName = tmNameAgg.getBuckets().get(0).getKeyAsString();
+                    trademark.setTmName(tmName);
+                    ParsedStringTerms tmLogoUrlAgg = bucket.getAggregations().get("tmLogoUrlAgg");
+                    String tmLogUrl = tmLogoUrlAgg.getBuckets().get(0).getKeyAsString();
+                    trademark.setTmLogoUrl(tmLogUrl);
+                    return trademark;
+                }).collect(Collectors.toList());
+        respVo.setTrademarkList(trademarkList);
+        //5、属性列表 select GROUP_CONCAT(attrValue) xxx group by attrId 等于 es里的聚合 aggregations
+        ParsedNested attrAgg = result.getAggregations().get("attrAgg");
+        //属性ID聚合结果
+        ParsedLongTerms attrIdAgg = attrAgg.getAggregations().get("attrIdAgg");
+        List<SearchRespVo.Attrs> attrsList = attrIdAgg.getBuckets().stream().map(bucket -> {
+            SearchRespVo.Attrs attrs = new SearchRespVo.Attrs();
+            //属性ID
+            long attrId = bucket.getKeyAsNumber().longValue();
+            attrs.setAttrId(attrId);
+            //属性名
+            ParsedStringTerms attrNameAgg = bucket.getAggregations().get("attrNameAgg");
+            String attrName = attrNameAgg.getBuckets().get(0).getKeyAsString();
+            attrs.setAttrName(attrName);
+            //属性值
+            ParsedStringTerms attrValueAgg = bucket.getAggregations().get("attrValueAgg");
+            List<String> attrValueList = attrValueAgg.getBuckets().stream().map(MultiBucketsAggregation.Bucket::getKeyAsString)
+                    .collect(Collectors.toList());
+            attrs.setAttrValueList(attrValueList);
+            return attrs;
+        }).collect(Collectors.toList());
+        respVo.setAttrsList(attrsList);
+        //6、url参数就是这一堆
         //list.html?category3Id=61&props=4:256GB:机身储存&props=3:8GB:运行内存
         String urlParam = buildUrlParam(searchParamVo);
         respVo.setUrlParam(urlParam);
@@ -116,11 +166,20 @@ public class SearchServiceImpl implements SearchService {
         }
 
         //8、商品列表
-        for (SearchHit<Goods> searchHit : result.getSearchHits()) {
-            Goods goods = searchHit.getContent();
-        }
+//        for (SearchHit<Goods> searchHit : result.getSearchHits()) {
+//            Goods goods = searchHit.getContent();
+//        }
         List<Goods> collect = result.getSearchHits().stream()
-                .map(SearchHit::getContent).collect(Collectors.toList());
+                .map(goodsSearchHit -> {
+                    Goods content = goodsSearchHit.getContent();
+                    if (!StringUtils.isEmpty(searchParamVo.getKeyword())) {
+                        //模糊检索带高亮提示
+                        String newTitle = goodsSearchHit.getHighlightField("title").get(0);
+                        content.setTitle(newTitle);
+                    }
+                    return content;
+                })
+                .collect(Collectors.toList());
         respVo.setGoodsList(collect);
 
         //9、页码
@@ -167,6 +226,7 @@ public class SearchServiceImpl implements SearchService {
         //分页不要
 //        builder.append("&pageNo").append(searchParamVo.getPageNo());
         return builder.toString();
+
     }
 
 
@@ -184,20 +244,11 @@ public class SearchServiceImpl implements SearchService {
         BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
         //构建bool里面的查询条件
         //1.1)、一级分类
-        if (Objects.nonNull(searchParamVo.getCategory1Id())) {
-            TermQueryBuilder term = QueryBuilders.termQuery("category1Id", searchParamVo.getCategory1Id());
-            boolQuery.must(term);
-        }
+        mustTermQuery(boolQuery, "category1Id", searchParamVo.getCategory1Id());
         //1.2)、二级分类
-        if (Objects.nonNull(searchParamVo.getCategory2Id())) {
-            TermQueryBuilder term = QueryBuilders.termQuery("category2Id", searchParamVo.getCategory2Id());
-            boolQuery.must(term);
-        }
+        mustTermQuery(boolQuery, "category2Id", searchParamVo.getCategory2Id());
         //1.3)、三级分类
-        if (Objects.nonNull(searchParamVo.getCategory3Id())) {
-            TermQueryBuilder term = QueryBuilders.termQuery("category3Id", searchParamVo.getCategory3Id());
-            boolQuery.must(term);
-        }
+        mustTermQuery(boolQuery, "category3Id", searchParamVo.getCategory3Id());
 
         //1.4)、关键字查询
         if (!StringUtils.isEmpty(searchParamVo.getKeyword())) {
@@ -227,10 +278,11 @@ public class SearchServiceImpl implements SearchService {
                     });
         }
 
+
         //=========================查询结束==============================================
 
         //创建一个原生query
-        Query query = new NativeSearchQuery(boolQuery);
+        NativeSearchQuery query = new NativeSearchQuery(boolQuery);
 
         //=========================排序开始=============================================
         if (!StringUtils.isEmpty(searchParamVo.getOrder())) {
@@ -250,6 +302,8 @@ public class SearchServiceImpl implements SearchService {
             }
             query.addSort(sort);
         }
+
+
         //=========================排序结束=============================================
 
         //=========================分页开始=============================================
@@ -259,7 +313,63 @@ public class SearchServiceImpl implements SearchService {
 
         //=========================分页结束=============================================
 
+
+        //=========================高亮=============================================
+        if (!StringUtils.isEmpty(searchParamVo.getKeyword())) {
+            //1、构建高亮
+            HighlightBuilder highlightBuilder = new HighlightBuilder()
+                    .field("title")
+                    .preTags("<span style='color:red'>")
+                    .postTags("</span>");
+            HighlightQuery highlightQuery = new HighlightQuery(highlightBuilder);
+            query.setHighlightQuery(highlightQuery);
+        }
+
+        //=========================聚合分析开始===========品牌==================================
+        //品牌id聚合
+        TermsAggregationBuilder tmIdAgg = AggregationBuilders
+                .terms("tmIdAgg").field("tmId").size(200);
+        //品牌name子聚合
+        TermsAggregationBuilder tmNameAgg = AggregationBuilders
+                .terms("tmNameAgg").field("tmName").size(1);
+        tmIdAgg.subAggregation(tmNameAgg);
+        //品牌url子聚合
+        TermsAggregationBuilder tmLogoUrlAgg = AggregationBuilders
+                .terms("tmLogoUrlAgg").field("tmLogoUrl").size(1);
+        tmIdAgg.subAggregation(tmLogoUrlAgg);
+
+        query.addAggregation(tmIdAgg);
+
+        //=========================聚合分析开始===========属性==================================
+        NestedAggregationBuilder attrAgg = AggregationBuilders.nested("attrAgg", "attrs");
+        //属性ID聚合分析
+        TermsAggregationBuilder attrIdAgg = AggregationBuilders
+                .terms("attrIdAgg")
+                .field("attrs.attrId").size(200);
+
+        attrAgg.subAggregation(attrIdAgg);
+
+        //属性名聚合分析
+        TermsAggregationBuilder attrNameAgg = AggregationBuilders
+                .terms("attrNameAgg")
+                .field("attrs.attrName").size(1);
+        TermsAggregationBuilder attrValueAgg = AggregationBuilders
+                .terms("attrValueAgg")
+                .field("attrs.attrValue").size(100);
+        attrIdAgg.subAggregation(attrNameAgg);
+        attrIdAgg.subAggregation(attrValueAgg);
+        query.addAggregation(attrAgg);
+
+
+        //=========================聚合分析结束=============================================
         return query;
+    }
+
+    private static void mustTermQuery(BoolQueryBuilder boolQuery, String name, Long value) {
+        if (Objects.nonNull(value)) {
+            TermQueryBuilder term = QueryBuilders.termQuery(name, value);
+            boolQuery.must(term);
+        }
     }
 
     @Override
@@ -270,5 +380,15 @@ public class SearchServiceImpl implements SearchService {
     @Override
     public void down(Long skuId) {
         goodsRepository.deleteById(skuId);
+    }
+
+    @Override
+    public void updateHotScore(Long skuId, Long score) {
+        Document document = Document.create();
+        document.put("hotScore", score);
+        //增量更新
+        UpdateQuery updateQuery = UpdateQuery.builder("" + skuId)
+                .withDocAsUpsert(true).withDocument(document).build();
+        elasticsearchRestTemplate.update(updateQuery, IndexCoordinates.of("goods"));
     }
 }

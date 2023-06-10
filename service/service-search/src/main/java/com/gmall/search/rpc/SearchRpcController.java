@@ -7,6 +7,7 @@ import com.gmall.search.vo.SearchRespVo;
 import com.gmall.search.service.SearchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
 /**
  * @Auther: Administrator
  * @Description
@@ -19,9 +20,23 @@ public class SearchRpcController {
     @Autowired
     SearchService searchService;
 
+    /**
+     * 增加热度分
+     * @param skuId
+     * @param score
+     * @return
+     */
+    @GetMapping("/hotscore/{skuId}/{score}")
+    public Result updateHotScore(@PathVariable("skuId") Long skuId,
+                                 @PathVariable("score") Long score) {
+        searchService.updateHotScore(skuId, score);
+        return Result.ok();
+    }
+
 
     /**
      * 下架
+     *
      * @param skuId
      * @return
      */
@@ -33,6 +48,7 @@ public class SearchRpcController {
 
     /**
      * 商品上架
+     *
      * @param goods
      * @return
      */
@@ -44,12 +60,13 @@ public class SearchRpcController {
 
     /**
      * 检索商品
+     *
      * @param searchParamVo
      * @return
      */
     @PostMapping("/searchgoods")
     public Result<SearchRespVo> search(@RequestBody SearchParamVo searchParamVo) {
-        //TODO 检索
+        //检索
         SearchRespVo resp = searchService.search(searchParamVo);
         return Result.ok(resp);
     }

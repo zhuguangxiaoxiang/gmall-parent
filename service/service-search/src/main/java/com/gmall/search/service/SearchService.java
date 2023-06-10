@@ -28,4 +28,11 @@ public interface SearchService {
      * @param skuId
      */
     void down(Long skuId);
+
+    /**
+     * 修改热度分
+     * @param skuId
+     * @param score
+     */
+    void updateHotScore(Long skuId, Long score);
 }

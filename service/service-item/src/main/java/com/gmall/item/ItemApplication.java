@@ -18,7 +18,10 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @EnableAutoExceptionHandler
 @EnableAppThreadPool
 //用谁扫谁
-@EnableFeignClients(basePackages = "com.gmall.feign.product")
+@EnableFeignClients(basePackages = {
+        "com.gmall.feign.product",
+        "com.gmall.feign.search"
+})
 @SpringCloudApplication
 public class ItemApplication {
     public static void main(String[] args) {

@@ -16,6 +16,17 @@ import org.springframework.web.bind.annotation.*;
 @FeignClient("service-search")
 public interface SearchFeignClient {
 
+
+    /**
+     * 增加热度分
+     * @param skuId
+     * @param score
+     * @return
+     */
+    @GetMapping("/hotscore/{skuId}/{score}")
+    Result updateHotScore(@PathVariable("skuId") Long skuId,
+                                 @PathVariable("score") Long score);
+
     /**
      * 检索商品
      * @param searchParamVo

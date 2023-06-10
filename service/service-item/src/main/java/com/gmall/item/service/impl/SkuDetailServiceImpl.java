@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -13,6 +14,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import com.gmall.common.constant.RedisConst;
 import com.gmall.feign.product.ProductSkuDetailFeignClient;
+import com.gmall.feign.search.SearchFeignClient;
 import com.gmall.product.entity.SkuImage;
 import com.gmall.product.entity.SpuSaleAttr;
 import com.gmall.product.vo.CategoryTreeVo;
@@ -54,6 +56,9 @@ public class SkuDetailServiceImpl implements SkuDetailService {
     @Autowired
     RedissonClient redissonClient;
 
+    @Autowired
+    SearchFeignClient searchFeignClient;
+
 
     //业务Service只关注业务，增强逻辑由切面完成
     //
@@ -67,6 +72,18 @@ public class SkuDetailServiceImpl implements SkuDetailService {
     @Override
     public SkuDetailVo getSkuDetailData(Long skuId) {
         return getDataFromRpc(skuId);
+    }
+
+    @Override
+    public void incrHotScore(Long skuId) {
+        CompletableFuture.runAsync(() -> {
+            //远程调用es增加热度
+            //1、累计热度
+            Long increment = redisTemplate.opsForValue().increment("sku:hotscore:" + skuId);
+            if (Objects.nonNull(increment) && increment % 100 == 0) {
+                searchFeignClient.updateHotScore(skuId, increment);
+            }
+        }, executor);
     }
 
 //    public SkuDetailVo getSkuDetailDataWithDistLock(Long skuId) throws InterruptedException {

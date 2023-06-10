@@ -65,7 +65,7 @@ public class FileUploadController {
 //        log.info("文件上传：文件名：{}，文件大小：{}，文件类型：{}", filename, file.getSize(), contentType);
 //
 //        String path = fileService.upload(file);
-//        //TODO 把这个文件上传给Minio，并返回访问地址
+//        //把这个文件上传给Minio，并返回访问地址
 //        return Result.ok(path);
 //    }
 

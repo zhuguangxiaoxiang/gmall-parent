@@ -1,7 +1,9 @@
 package com.gmall.search.vo;
 
 import com.gmall.search.Goods;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
@@ -26,7 +28,7 @@ public class SearchRespVo {
     private String urlParam;
     //7、排序信息
     private OrderMap orderMap;
-    //8、TODO 商品列表
+    //8、商品列表
     private List<Goods> goodsList;
     //9、页码
     private Integer pageNo;
@@ -47,13 +49,14 @@ public class SearchRespVo {
         private Long tmId;
         private String tmName;
         private String tmLogoUrl;
+
     }
 
     @Data
     public static class Attrs {
+        private Long attrId;
         private String attrName;
         private List<String>attrValueList;
-        private Long attrId;
     }
 
     @Data

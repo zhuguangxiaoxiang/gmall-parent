@@ -8,4 +8,10 @@ import com.gmall.product.vo.SkuDetailVo;
  */
 public interface SkuDetailService {
     SkuDetailVo getSkuDetailData(Long skuId);
+
+    /**
+     * 增强商品热度
+     * @param skuId
+     */
+    void incrHotScore(Long skuId);
 }
